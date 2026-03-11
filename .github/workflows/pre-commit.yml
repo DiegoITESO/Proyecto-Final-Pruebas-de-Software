@@ -1,0 +1,29 @@
+name: Style Enforcement
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  enforce-style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Clang-Format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Check Formatting
+        run: |
+          find . -iname *.cpp -o -iname *.hpp -o -iname *.h | xargs clang-format --dry-run --Werror -style=file
+
+      - name: Static Analysis (Safety Check)
+        run: |
+          sudo apt-get install -y cppcheck
+          cppcheck --enable=warning,style,performance --error-exitcode=1 .
