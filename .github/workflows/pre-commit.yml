@@ -21,7 +21,8 @@ jobs:
 
       - name: Check Formatting
         run: |
-          find . -type f \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.h" \) -print0 | xargs -0 clang-format --dry-run --Werror -style=file
+          # Solo busca en carpetas específicas para evitar que se pierda en .git o archivos basura
+          find src include tests -type f \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.h" \) -print0 | xargs -0 clang-format --dry-run --Werror -style=file
 
       - name: Static Analysis (Safety Check)
         run: |
