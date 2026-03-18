@@ -89,6 +89,139 @@ This removes the executables (`logistic_churn`, `run_tests`) from the project di
 └── README.md         # Project documentation
 ```
 
+# Como contribuir
+
+Gracias por tu interes en contribuir a este proyecto! Aqui explicamos como trabajar con el repositorio para que tus contribuciones se integren de forma ordenada y consistente.
+
+## Resumen rapido
+- Forkea el proyecto (si no eres colaborador directo).
+- Crea una rama temporal para tu trabajo (no trabajes directamente en main).
+- Asegurate de que los linters y tests pasen localmente.
+- Usa mensajes de commit siguiendo Conventional Commits.
+- Abre un Pull Request (PR) desde tu rama hacia la rama de destino (main o develop) y espera la revision y aprobacion.
+
+---
+
+## Flujo recomendado (paso a paso)
+
+1. Fork (si procede) y clona
+   - Forkea el repo en GitHub (si eres contribuidor externo).
+   - Clona tu fork:
+     ```
+     git clone [https://github.com/TU_USUARIO/Proyecto-Final-Pruebas-de-Software.git](https://github.com/TU_USUARIO/Proyecto-Final-Pruebas-de-Software.git)
+     cd Proyecto-Final-Pruebas-de-Software
+     ```
+
+2. Sincroniza con el upstream (opcional pero recomendado)
+   - Añade el remoto upstream y sincroniza:
+     ```
+     git remote add upstream [https://github.com/DiegoITESO/Proyecto-Final-Pruebas-de-Software.git](https://github.com/DiegoITESO/Proyecto-Final-Pruebas-de-Software.git)
+     git fetch upstream
+     git checkout main
+     git merge upstream/main
+     ```
+
+3. Crea una rama para tu trabajo
+   - Usa un nombre de rama descriptivo y corto:
+     - feature/123-descripcion-corta
+     - fix/45-corregir-error-login
+     - chore/actualizar-dependencias
+     ```
+     git checkout -b feature/<issue>-descripcion-corta
+     ```
+
+4. Realiza cambios y ejecuta checks locales
+   - Asegurate de ejecutar los linters y tests que esten configurados en el repositorio antes de commitear.
+   - Pre-commit: hooks que se ejecutan al commitear. Para lanzarlo manualmente:
+     ```
+     pre-commit run --all-files
+     ```
+     (Si no tienes pre-commit instalado: `pip install pre-commit` o revisa la documentacion del proyecto.)
+
+   - Ejecuta los tests del proyecto segun la configuracion (ejemplos):
+     ```
+     npm test
+     # o
+     pytest
+     ```
+
+5. Commits: sigue Conventional Commits
+   - Formato general: `<type>(scope?): subject`
+   - Tipos comunes:
+     - feat: nueva funcionalidad
+     - fix: arreglo de bug
+     - docs: documentacion
+     - style: formato / estilo (no afecta codigo)
+     - refactor: refactorizacion sin cambios de funcionalidad
+     - test: añadir/ajustar tests
+     - chore: tareas de mantenimiento
+   - Ejemplos:
+     ```
+     git add .
+     git commit -m "feat: agregar pruebas de integracion para login"
+     git commit -m "fix(auth): validar token en /api/user"
+     ```
+   - Si el repositorio tiene un linter para commits (commitlint), los commits que no cumplan la convencion seran rechazados.
+
+6. Si necesitas editar mensajes de commit
+   - Para corregir el ultimo commit:
+     ```
+     git commit --amend -m "fix: mensaje corregido"
+     ```
+   - Para reescribir varios commits: `git rebase -i HEAD~N` (con cuidado).
+
+7. Push y Pull Request
+   - Push a tu fork/remoto:
+     ```
+     git push origin feature/<issue>-descripcion-corta
+     ```
+   - Abre un Pull Request desde tu rama hacia la rama de destino del repo original (por ejemplo main o develop).
+   - En la descripcion del PR incluye:
+     - Resumen del cambio.
+     - Issue relacionado (si aplica): `Closes #NN`
+     - Como probar los cambios localmente.
+     - Evidencia (capturas, logs) si procede.
+
+---
+
+## Checklist recomendado para el PR
+Antes de solicitar revision, verifica:
+- [ ] Los linters pasan localmente (pre-commit).
+- [ ] Todos los tests relevantes pasan.
+- [ ] Los mensajes de commit siguen Conventional Commits.
+- [ ] La rama esta actualizada con la rama de destino (merge/rebase si es necesario).
+- [ ] El PR tiene una descripcion clara y, si aplica, vincula el issue correspondiente.
+- [ ] No incluyes secretos ni credenciales.
+
+---
+
+## Revision y merge
+- Los mantenedores revisaran el PR y pueden solicitar cambios.
+- El PR se fusionara cuando:
+  - Tenga la aprobacion(es) requerida(s).
+  - Pase las comprobaciones automaticas (CI).
+  - Cumpla con las normas de estilo y commits.
+
+---
+
+## Convenciones de nombres de ramas (sugeridas)
+- feature/<numero>-descripcion-corta
+- fix/<numero>-descripcion-corta
+- chore/<descripcion-corta>
+- docs/<descripcion-corta>
+
+Usa solo letras minusculas y guiones para separar palabras.
+
+---
+
+## Informacion sobre los linters que usamos
+- pre-commit: hooks que verifican formato, linting y otras comprobaciones antes de permitir el commit. Ejecuta los hooks localmente con:
+
+```bash 
+pre-commit run --all-files
+```
+
+
 ## Training and Prediction Workflow
 
 1. **Training a model:** The program reads a CSV dataset, preprocesses features (normalization, one-hot encoding), trains the logistic regression model, and saves the weights.
