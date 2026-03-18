@@ -21,8 +21,14 @@ jobs:
 
       - name: Check Formatting
         run: |
-          # Solo busca en carpetas específicas para evitar que se pierda en .git o archivos basura
-          find src include tests -type f \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.h" \) -print0 | xargs -0 clang-format --dry-run --Werror -style=file
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
+              echo "ERROR: clang-format failed or timed out on $file"
+              exit 1
+            fi
+          done < <(git ls-files -z -- '*.cpp' '*.hpp' '*.h')
 
       - name: Static Analysis (Safety Check)
         run: |
