@@ -21,9 +21,10 @@ jobs:
 
       - name: Check Formatting
         run: |
-          find . -iname *.cpp -o -iname *.hpp -o -iname *.h | xargs clang-format --dry-run --Werror -style=file
+          find . -type f \( -iname "*.cpp" -o -iname "*.hpp" -o -iname "*.h" \) -print0 | xargs -0 clang-format --dry-run --Werror -style=file
 
       - name: Static Analysis (Safety Check)
         run: |
+          sudo apt-get update
           sudo apt-get install -y cppcheck
           cppcheck --enable=warning,style,performance --error-exitcode=1 .
