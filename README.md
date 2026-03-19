@@ -144,7 +144,7 @@ pre-commit run --all-files
 
 ## Requirements
 
-## FR-01: Command Line Interface (CLI)
+### FR-01: Command Line Interface (CLI)
 The system shall provide a command-line interface that allows the user to execute the following options:
 - `--help`: Display help information with available commands.
 - `--train`: Train a new model using a dataset.
@@ -153,7 +153,7 @@ The system shall provide a command-line interface that allows the user to execut
 
 ---
 
-## FR-02: Training Input Parameters
+### FR-02: Training Input Parameters
 In training mode (`--train`), the system shall request the following inputs from the user:
 - Path to the input CSV file.
 - Output path to save the trained model (JSON file).
@@ -165,7 +165,7 @@ In training mode (`--train`), the system shall request the following inputs from
 
 ---
 
-## FR-03: Data Validation and Reading
+### FR-03: Data Validation and Reading
 The system shall:
 - Read CSV files provided by the user.
 - Validate that all rows have the same number of columns.
@@ -173,7 +173,7 @@ The system shall:
 
 ---
 
-## FR-04: Data Preprocessing
+### FR-04: Data Preprocessing
 The system shall preprocess the input data by:
 - Converting categorical values "yes"/"no" to numerical values (1.0/0.0).
 - Interpreting numerical values as double.
@@ -183,14 +183,14 @@ The system shall preprocess the input data by:
 
 ---
 
-## FR-05: Dataset Splitting
+### FR-05: Dataset Splitting
 The system shall split the dataset into:
 - 80% for training.
 - 20% for testing.
 
 ---
 
-## FR-06: Model Training
+### FR-06: Model Training
 The system shall:
 - Train a logistic regression model.
 - Use stochastic gradient descent (SGD) as the optimization algorithm.
@@ -198,14 +198,14 @@ The system shall:
 
 ---
 
-## FR-07: Model Storage
+### FR-07: Model Storage
 The system shall:
 - Save the trained model in a JSON file.
 - Include weights (array of doubles) and bias (double).
 
 ---
 
-## FR-08: Model Evaluation
+### FR-08: Model Evaluation
 In `--train --evaluate` mode, the system shall:
 - Compute the following metrics:
   - Accuracy
@@ -217,7 +217,7 @@ In `--train --evaluate` mode, the system shall:
 
 ---
 
-## FR-09: Prediction Input Parameters
+### FR-09: Prediction Input Parameters
 In prediction mode (`--predict`), the system shall request:
 - Path to the trained model file (JSON).
 - Path to the input dataset (CSV).
@@ -227,7 +227,7 @@ In prediction mode (`--predict`), the system shall request:
 
 ---
 
-## FR-10: Prediction Generation
+### FR-10: Prediction Generation
 The system shall:
 - Load the trained model.
 - Preprocess the input dataset in the same way as during training.
@@ -236,14 +236,14 @@ The system shall:
 
 ---
 
-## FR-11: Model Persistence and Loading
+### FR-11: Model Persistence and Loading
 The system shall:
 - Load previously saved models from JSON files.
 - Use loaded parameters to perform predictions.
 
 ---
 
-## FR-12: Logging
+### FR-12: Logging
 The system shall:
 - Generate log files in a `logs/` directory.
 - Include a timestamp in each log file.
@@ -255,7 +255,7 @@ The system shall:
   - Prediction generation
   - Errors
 
-## NFR-01: Code Formatting (ClangFormat)
+### NFR-01: Code Formatting (ClangFormat)
 The system shall enforce a consistent coding style using ClangFormat.
 
 - All source code must conform to a predefined `.clang-format` configuration file.
@@ -264,7 +264,7 @@ The system shall enforce a consistent coding style using ClangFormat.
 
 ---
 
-## NFR-02: Linting Integration
+### NFR-02: Linting Integration
 The system shall include ClangFormat as part of the development workflow.
 
 - Developers must run ClangFormat before committing code.
@@ -272,7 +272,7 @@ The system shall include ClangFormat as part of the development workflow.
 
 ---
 
-## NFR-03: Unit Testing Framework (Catch2)
+### NFR-03: Unit Testing Framework (Catch2)
 The system shall include unit tests implemented using the Catch2 framework.
 
 - All core functionalities must be covered by unit tests.
@@ -281,14 +281,14 @@ The system shall include unit tests implemented using the Catch2 framework.
 
 ---
 
-## NFR-04: Test Coverage
+### NFR-04: Test Coverage
 The system shall ensure a minimum level of test coverage.
 
 - At least 70% of the codebase must be covered by unit tests.
 
 ---
 
-## NFR-05: Test Execution
+### NFR-05: Test Execution
 The system shall allow execution of all unit tests through a single command.
 
 - Tests must be executable via command line
@@ -296,7 +296,7 @@ The system shall allow execution of all unit tests through a single command.
 
 ---
 
-## NFR-06: Continuous Testing (Optional)
+### NFR-06: Continuous Testing (Optional)
 The system should support automated test execution.
 
 - Unit tests should be executed automatically in a CI/CD pipeline.
@@ -304,7 +304,7 @@ The system should support automated test execution.
 
 ---
 
-## NFR-07: Error Handling Validation
+### NFR-07: Error Handling Validation
 Unit tests shall validate error handling behavior.
 
 - Tests must verify that the system correctly handles:
@@ -315,7 +315,7 @@ Unit tests shall validate error handling behavior.
 
 ---
 
-## NFR-08: Reproducibility
+### NFR-08: Reproducibility
 The system shall ensure reproducibility of tests.
 
 - Tests must produce consistent results across different environments.
@@ -323,9 +323,155 @@ The system shall ensure reproducibility of tests.
 
 ---
 
-## NFR-09: Maintainability
+### NFR-09: Maintainability
 The system shall ensure maintainable test and code structure.
 
 - Test files must be separated from production code.
 - Naming conventions must be clear and consistent.
 - Code must be modular to facilitate testing.
+
+
+## Mockups
+
+### Help
+
+```bash
+$ ./logistic_churn --help
+```
+
+```
+Customer Churn Predictor - Command Line Interface
+--------------------------------------------------
+Usage:
+  ./logistic_churn [OPTION]
+
+Options:
+  --help             Show this help message and exit
+  --train            Train a new model
+  --train --evaluate Train a model and evaluate its accuracy
+  --predict          Predict churn using an existing trained model
+
+Examples:
+  ./logistic_churn --train
+  ./logistic_churn --train --evaluate
+  ./logistic_churn --predict
+
+Log files are saved under the 'logs/' directory with timestamped names.
+```
+
+### Train
+
+```bash
+./logistic_churn --train
+```
+
+**Results:**
+
+```
+Enter the dataset file location:
+data/customer_data.csv
+
+Enter the destination output file location:
+models/weights.json
+
+Does it have a header? (y/n): y
+
+Enter the index of the column that contains the results (weather the client churned or not):
+(0 indexed)
+5
+
+Enter the indices of the columns you want to drop 
+(press enter if you dont want any columns to be dropped):
+(These can be IDs or data with weak or nonexistent correlation to the churn. Enter the numbers space-separated)
+0 1
+
+Enter the learning rate
+0.01
+
+Enter the number of epochs
+1000
+
+Progress: 0%
+Progress: 1%
+Progress: 2%
+...
+Progress: 99%
+Progress: 100%
+```
+
+### Evaluate
+
+```bash
+$ ./logistic_churn --train --evaluate
+```
+
+**Results:**
+
+```
+Enter the dataset file location:
+data/customer_data.csv
+
+Enter the destination output file location:
+models/weights.json
+
+Does it have a header? (y/n): y
+
+Enter the index of the column that contains the results (weather the client churned or not):
+(0 indexed)
+5
+
+Enter the indices of the columns you want to drop (press enter if you don't want any columns to be dropped):
+(These can be IDs or data with weak or nonexistent correlation to the churn. Enter the numbers space-separated)
+0 1
+
+Enter the learning rate
+0.01
+
+Enter the number of epochs
+1000
+
+Progress: 0%
+Progress: 1%
+...
+Progress: 100%
+
+Accuracy: 0.872340
+Precision: 0.857143
+Recall: 0.818182
+F1 score: 0.837209
+```
+
+### Prediccion
+
+```bash
+$ ./logistic_churn --predict
+```
+
+**Results**
+
+```
+Enter the weights file location:
+models/weights.json
+
+Enter the dataset file location:
+data/new_customers.csv
+
+Enter the destination output file location:
+output/predictions.csv
+
+Does it have a header? (y/n): y
+
+Enter the indices of the columns you want to drop (press enter if you don't want any columns to be dropped):
+(These can be IDs or data with weak or nonexistent correlation to the churn. Enter the numbers space-separated)
+0
+```
+
+**predictions.csv**
+
+```
+0.923456
+0.112345
+0.456789
+0.987654
+...
+```
