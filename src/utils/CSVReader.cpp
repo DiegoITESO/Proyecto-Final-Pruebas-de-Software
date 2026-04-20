@@ -23,7 +23,7 @@ ProcessedData CSVReader::preprocess(
     const std::vector<std::vector<std::string>>& data, bool hasHeader,
     size_t churnColumn, std::vector<size_t> dropColumns)
 //~~~~MAPPING YES/NO TO 1.0/0.0 AND USING ONE-HOT ENCODING FOR STRING
-//PARAMETERS~~~~//
+// PARAMETERS~~~~//
 {
   // MAPPING THE ONE HOT ENCODING //
   if (dropColumns.size() >= data[0].size() - 1)
