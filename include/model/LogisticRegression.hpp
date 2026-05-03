@@ -13,6 +13,7 @@
 #include "../utils/json.hpp"
 
 class LogisticRegression {
+  friend struct LogisticRegressionTester;
  public:
   LogisticRegression(size_t n_features);
   double predict(const Vector& x) const;
