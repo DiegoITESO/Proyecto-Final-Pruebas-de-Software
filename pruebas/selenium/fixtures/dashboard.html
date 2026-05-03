@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Churn Predictor - Overview</title>
+</head>
+<body>
+  <header>
+    <h1 data-testid="dashboard-title">Customer Churn Predictor</h1>
+    <nav data-testid="main-nav">
+      <a href="help.html" data-testid="nav-help">CLI help</a>
+      <a href="train.html" data-testid="nav-train">Train flow</a>
+      <a href="predict.html" data-testid="nav-predict">Predict flow</a>
+      <a href="metrics.html" data-testid="nav-metrics">Evaluate metrics</a>
+      <a href="architecture.html" data-testid="nav-arch">Architecture</a>
+    </nav>
+  </header>
+  <main>
+    <p data-testid="blurb-logistic">Core: manual logistic regression with sigmoid.</p>
+    <p data-testid="blurb-csv">IO: CSVReader for training and prediction datasets.</p>
+    <p data-testid="blurb-sgd">Optimizer: stochastic gradient descent from scratch.</p>
+    <p data-testid="blurb-split">Splitter: random 80% train / 20% test split.</p>
+  </main>
+</body>
+</html>

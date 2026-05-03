@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Architecture</title>
+</head>
+<body>
+  <main data-testid="arch-root">
+    <h1>Module map (C++ codebase)</h1>
+    <ul>
+      <li data-testid="mod-vector">Vector: core element-wise ops in src/core/Vector.cpp</li>
+      <li data-testid="mod-matrix">Matrix: linear algebra in src/core/Matrix.cpp</li>
+      <li data-testid="mod-splitter">Splitter: dataset split abstraction</li>
+      <li data-testid="mod-model">LogisticRegression: train, predict, metrics</li>
+      <li data-testid="mod-csv">CSVReader: readCSV and preprocess</li>
+      <li data-testid="mod-logger">Logger: timestamped files under logs/</li>
+      <li data-testid="mod-cli">ArgParser: --help --train --predict entry</li>
+    </ul>
+    <p data-testid="cli-unknown">Invalid argv[1] throws runtime_error Unknown option (see ArgParser::run).</p>
+  </main>
+</body>
+</html>

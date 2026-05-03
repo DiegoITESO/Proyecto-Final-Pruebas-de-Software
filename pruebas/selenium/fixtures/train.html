@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Train - Churn Predictor</title>
+  <style> .hidden { display: none; } .error { color: #a00; } </style>
+</head>
+<body>
+  <h1 data-testid="train-page-title">Training wizard (mirrors --train prompts)</h1>
+  <p data-testid="fr02-note">FR-02: interactive training parameters match ArgParser.collectTrainData.</p>
+  <form id="train-form" data-testid="train-form">
+    <label for="dataset">Enter the dataset file location:</label>
+    <input id="dataset" name="dataset" data-testid="input-dataset" aria-required="true" placeholder="data/customer_data.csv" />
+    <label for="output">Enter the destination output file location:</label>
+    <input id="output" name="output" data-testid="input-output" aria-required="true" placeholder="models/weights.json" />
+    <fieldset>
+      <legend>Does it have a header? (y/n)</legend>
+      <label><input type="radio" name="header" value="y" data-testid="header-y" checked /> y</label>
+      <label><input type="radio" name="header" value="n" data-testid="header-n" /> n</label>
+    </fieldset>
+    <label for="churn">Enter the index of the column that contains the results (0 indexed):</label>
+    <input type="number" id="churn" name="churn" data-testid="input-churn" min="0" value="5" />
+    <label for="drops">Columns to drop (space-separated, optional):</label>
+    <textarea id="drops" name="drops" data-testid="input-drops" rows="2" placeholder="0 1"></textarea>
+    <p data-testid="drop-hint">These can be IDs or weakly correlated columns.</p>
+    <label for="alpha">Enter the learning rate</label>
+    <input type="number" step="any" id="alpha" name="alpha" data-testid="input-alpha" value="0.01" />
+    <label for="epochs">Enter the number of epochs</label>
+    <input type="number" id="epochs" name="epochs" data-testid="input-epochs" value="100" />
+    <p data-testid="norm-doc">Preprocess: normalize features to mean 0 and std 1.</p>
+    <p data-testid="encode-doc">Preprocess: one-hot for non-numeric categorical columns.</p>
+    <button type="submit" data-testid="btn-submit-train">Run training preview</button>
+  </form>
+  <p id="train-error" class="error hidden" data-testid="train-error"></p>
+  <div id="train-result" class="hidden" data-testid="train-result">
+    <p data-testid="train-result-text">Summary: paths recorded for FR-02 trace.</p>
+  </div>
+  <script>
+    document.getElementById("train-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var ds = document.getElementById("dataset").value.trim();
+      var out = document.getElementById("output").value.trim();
+      var err = document.getElementById("train-error");
+      var res = document.getElementById("train-result");
+      err.classList.add("hidden");
+      res.classList.add("hidden");
+      if (!ds) {
+        err.textContent = "Dataset path is required.";
+        err.classList.remove("hidden");
+        return;
+      }
+      if (!out) {
+        err.textContent = "Output path is required.";
+        err.classList.remove("hidden");
+        return;
+      }
+      res.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
