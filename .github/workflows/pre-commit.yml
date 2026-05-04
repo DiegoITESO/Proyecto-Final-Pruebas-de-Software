@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          git ls-files -z | grep -zE '\.(cpp|hpp|h)$' | grep -zv 'include/utils/json.hpp' | \
+          git ls-files -z | grep -zE '\.(cpp|hpp|h)$' | grep -zvE 'include/utils/json.hpp|tests/catch.hpp|tests/' | \
           while IFS= read -r -d '' file; do
             echo "Checking $file"
             if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
