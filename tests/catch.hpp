@@ -3939,12 +3939,11 @@ namespace Catch {
     do{ if( !(condition) ) CATCH_ERROR( __VA_ARGS__ ); } while(false)
 
 // end catch_enforce.h
-#include <memory>
-#include <vector>
 #include <cassert>
-
-#include <utility>
 #include <exception>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace Catch {
 
@@ -4508,9 +4507,9 @@ namespace Catch {
 // end catch_option.hpp
 #include <chrono>
 #include <iosfwd>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace Catch {
 
@@ -4798,9 +4797,9 @@ GeneratorWrapper<ResultType> from_range(Container const& cnt) {
 // in the conditionally compiled sections
 // start catch_test_case_info.h
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #ifdef __clang__
 #pragma clang diagnostic push
@@ -5142,9 +5141,9 @@ namespace Catch
 }
 
 // end catch_wildcard_pattern.h
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace Catch {
 
@@ -5302,8 +5301,8 @@ namespace Catch {
 // Libstdc++ doesn't like incomplete classes for unique_ptr
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 #ifndef CATCH_CONFIG_CONSOLE_WIDTH
 #define CATCH_CONFIG_CONSOLE_WIDTH 80
@@ -5514,12 +5513,12 @@ namespace Catch {
 #include <iterator>
 #endif // CATCH_CONFIG_ENABLE_BENCHMARKING
 
-#include <string>
+#include <algorithm>
 #include <iosfwd>
 #include <map>
-#include <set>
 #include <memory>
-#include <algorithm>
+#include <set>
+#include <string>
 
 namespace Catch {
 
@@ -5761,10 +5760,10 @@ namespace Catch {
 
 // end catch_interfaces_reporter.h
 #include <algorithm>
-#include <cstring>
+#include <cassert>
 #include <cfloat>
 #include <cstdio>
-#include <cassert>
+#include <cstring>
 #include <memory>
 #include <ostream>
 
@@ -6742,9 +6741,9 @@ namespace Catch {
 
 
 #include <cassert>
+#include <memory>
 #include <type_traits>
 #include <utility>
-#include <memory>
 
 namespace Catch {
     namespace Benchmark {
@@ -6908,8 +6907,8 @@ namespace Catch {
 } // namespace Catch
 
 // end catch_measure.hpp
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 namespace Catch {
     namespace Benchmark {
@@ -7003,15 +7002,15 @@ namespace Catch {
 
 
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
 #include <functional>
-#include <vector>
 #include <iterator>
 #include <numeric>
-#include <tuple>
-#include <cmath>
-#include <utility>
-#include <cstddef>
 #include <random>
+#include <tuple>
+#include <utility>
+#include <vector>
 
 namespace Catch {
     namespace Benchmark {
@@ -7146,10 +7145,10 @@ namespace Catch {
 
 // end catch_stats.hpp
 #include <algorithm>
+#include <cmath>
 #include <iterator>
 #include <tuple>
 #include <vector>
-#include <cmath>
 
 namespace Catch {
     namespace Benchmark {
@@ -7251,9 +7250,9 @@ namespace Catch {
 
 
 #include <algorithm>
-#include <vector>
-#include <string>
 #include <iterator>
+#include <string>
+#include <vector>
 
 namespace Catch {
     namespace Benchmark {
@@ -7345,10 +7344,10 @@ namespace Catch {
 
 // end catch_analyse.hpp
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <string>
 #include <vector>
-#include <cmath>
 
 namespace Catch {
     namespace Benchmark {
@@ -7523,9 +7522,9 @@ namespace Catch {
 // Keep these here for external reporters
 // start catch_test_case_tracker.h
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace Catch {
 namespace TestCaseTracking {
@@ -8850,11 +8849,11 @@ inline auto Column::operator + (Column const& other) -> Columns {
 // ----------- end of #include from clara_textflow.hpp -----------
 // ........... back in clara.hpp
 
+#include <algorithm>
 #include <cctype>
-#include <string>
 #include <memory>
 #include <set>
-#include <algorithm>
+#include <string>
 
 #if !defined(CATCH_PLATFORM_WINDOWS) && ( defined(WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(_MSC_VER) )
 #define CATCH_PLATFORM_WINDOWS
@@ -9766,8 +9765,8 @@ namespace Catch {
 } // end namespace Catch
 
 // end catch_commandline.h
-#include <fstream>
 #include <ctime>
+#include <fstream>
 
 namespace Catch {
 
@@ -10471,9 +10470,10 @@ namespace Catch {
 
 #if defined(CATCH_PLATFORM_MAC) || defined(CATCH_PLATFORM_IPHONE)
 
-#  include <cassert>
 #  include <sys/types.h>
 #  include <unistd.h>
+
+#  include <cassert>
 #  include <cstddef>
 #  include <ostream>
 
@@ -10628,8 +10628,8 @@ namespace Catch {
 // start catch_enum_values_registry.cpp
 // start catch_enum_values_registry.h
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace Catch {
 
@@ -10652,8 +10652,8 @@ namespace Catch {
 
 // end catch_enum_values_registry.h
 
-#include <map>
 #include <cassert>
+#include <map>
 
 namespace Catch {
 
@@ -10732,9 +10732,9 @@ namespace Catch {
 
 // start catch_exception_translator_registry.h
 
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
 namespace Catch {
 
@@ -11331,9 +11331,9 @@ namespace Catch {
 }
 
 // end catch_text.h
-#include <limits>
 #include <algorithm>
 #include <iomanip>
+#include <limits>
 
 namespace Catch {
 
@@ -11559,13 +11559,13 @@ namespace Catch {
 // end catch_to_string.hpp
 #include <algorithm>
 #include <cmath>
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 #include <cstring>
-#include <sstream>
-#include <type_traits>
 #include <iomanip>
 #include <limits>
+#include <sstream>
+#include <type_traits>
 
 namespace Catch {
 namespace {
@@ -12362,10 +12362,10 @@ namespace {
 
 // start catch_test_case_registry_impl.h
 
-#include <vector>
-#include <set>
 #include <algorithm>
 #include <ios>
+#include <set>
+#include <vector>
 
 namespace Catch {
 
@@ -12484,8 +12484,8 @@ namespace Catch {
 // end catch_tag_alias_registry.h
 // start catch_startup_exception_registry.h
 
-#include <vector>
 #include <exception>
+#include <vector>
 
 namespace Catch {
 
@@ -12668,8 +12668,8 @@ namespace Catch {
 // end catch_result_type.cpp
 // start catch_run_context.cpp
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <sstream>
 
 namespace Catch {
@@ -13385,8 +13385,8 @@ namespace Catch {
 // end catch_version.h
 #include <cstdlib>
 #include <iomanip>
-#include <set>
 #include <iterator>
+#include <set>
 
 namespace Catch {
 
@@ -13730,11 +13730,11 @@ void StartupExceptionRegistry::add( std::exception_ptr const& exception ) noexce
 // start catch_stream.cpp
 
 #include <cstdio>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <memory>
 #include <sstream>
 #include <vector>
-#include <memory>
 
 namespace Catch {
 
@@ -13902,9 +13902,9 @@ namespace Catch {
 // start catch_string_manip.cpp
 
 #include <algorithm>
-#include <ostream>
-#include <cstring>
 #include <cctype>
+#include <cstring>
+#include <ostream>
 #include <vector>
 
 namespace Catch {
@@ -14006,9 +14006,9 @@ namespace Catch {
 // start catch_stringref.cpp
 
 #include <algorithm>
-#include <ostream>
-#include <cstring>
 #include <cstdint>
+#include <cstring>
+#include <ostream>
 
 namespace Catch {
     StringRef::StringRef( char const* rawChars ) noexcept
@@ -14117,9 +14117,9 @@ namespace Catch {
 // end catch_tag_alias_registry.cpp
 // start catch_test_case_info.cpp
 
+#include <algorithm>
 #include <cctype>
 #include <exception>
-#include <algorithm>
 #include <sstream>
 
 namespace Catch {
@@ -14455,9 +14455,9 @@ namespace Catch {
 
 #include <algorithm>
 #include <cassert>
-#include <stdexcept>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
 
 #if defined(__clang__)
 #    pragma clang diagnostic push
@@ -14723,9 +14723,9 @@ namespace Catch {
 // start catch_test_spec.cpp
 
 #include <algorithm>
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace Catch {
 
@@ -15877,10 +15877,10 @@ namespace {
 // end catch_xmlwriter.cpp
 // start catch_reporter_bases.cpp
 
-#include <cstring>
+#include <cassert>
 #include <cfloat>
 #include <cstdio>
-#include <cassert>
+#include <cstring>
 #include <memory>
 
 namespace Catch {
@@ -16918,11 +16918,11 @@ CATCH_REGISTER_REPORTER("console", ConsoleReporter)
 // end catch_reporter_console.cpp
 // start catch_reporter_junit.cpp
 
-#include <cassert>
-#include <sstream>
-#include <ctime>
 #include <algorithm>
+#include <cassert>
+#include <ctime>
 #include <iomanip>
+#include <sstream>
 
 namespace Catch {
 
