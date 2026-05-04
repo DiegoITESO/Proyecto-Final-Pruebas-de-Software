@@ -35,7 +35,8 @@ Vector Matrix::operator*(const Vector& times) {
         "The number of elements in vector must be equal to the number of "
         "columns in matrix");
   std::vector<double> result;
-  for (Vector& row : rows_) result.push_back(row.dot(times));
+  for (const Vector& row : rows_)
+    result.push_back(row.dot(times));
   return Vector(result);
 };
 Matrix Matrix::operator*(const double scalar) {
