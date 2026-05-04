@@ -1,53 +1,54 @@
 name: Style Enforcement
 
 on:
-push:
-branches: [ main, dev ]
-pull_request:
-branches: [ main ]
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
 
 jobs:
-enforce-style:
-runs-on: ubuntu-latest
+  enforce-style:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  - name: Install Clang-Format
-    run: |
-      sudo apt-get update
-      sudo apt-get install -y clang-format
+      - name: Install Clang-Format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
 
-  - name: Check Formatting
-    run: |
-      set -euo pipefail
+      - name: Check Formatting
+        run: |
+          set -euo pipefail
 
-      git ls-files -z | grep -zE '\.(cpp|hpp|h)$' | grep -zv 'include/utils/json.hpp' | \
-      while IFS= read -r -d '' file; do
-        echo "Checking $file"
-        if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
-          echo "ERROR: clang-format failed or timed out on $file"
-          exit 1
-        fi
-      done
+          git ls-files -z | grep -zE '\.(cpp|hpp|h)$' | grep -zv 'include/utils/json.hpp' | \
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
+              echo "ERROR: clang-format failed or timed out on $file"
+              exit 1
+            fi
+          done
 
-  - name: Install Cppcheck
-    run: |
-      sudo apt-get update
-      sudo apt-get install -y cppcheck
+      - name: Install Cppcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck
 
-  - name: Static Analysis (Safety Check)
-    run: |
-      cppcheck \
-        --enable=warning,style,performance \
-        --error-exitcode=1 \
-        --force \
-        --inline-suppr \
-        --suppress=syntaxError:include/utils/json.hpp \
-        --suppress=*:include/utils/json.hpp \
-        --suppress=missingIncludeSystem \
-        --suppress=useStlAlgorithm \
-        src/
-```
+      - name: Static Analysis (Safety Check)
+        run: |
+          cppcheck \
+            --enable=warning,style,performance \
+            --error-exitcode=1 \
+            --force \
+            --inline-suppr \
+            --suppress=syntaxError:include/utils/json.hpp \
+            --suppress=*:include/utils/json.hpp \
+            --suppress=missingIncludeSystem \
+            --suppress=useStlAlgorithm \
+            src/
