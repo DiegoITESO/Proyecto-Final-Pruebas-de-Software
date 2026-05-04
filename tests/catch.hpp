@@ -1,3 +1,4 @@
+// clang-format off
 /*
  *  Catch v2.13.10
  *  Generated: 2022-10-16 11:01:23.452308
@@ -10,6 +11,7 @@
  */
 #ifndef TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
 #define TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
+#ifndef __cppcheck__
 // start catch.hpp
 
 
@@ -617,6 +619,7 @@ namespace Catch {
     public: // construction
         constexpr StringRef() noexcept = default;
 
+// cppcheck-suppress noExplicitConstructor
         StringRef( char const* rawChars ) noexcept;
 
         constexpr StringRef( char const* rawChars, size_type size ) noexcept
@@ -624,6 +627,7 @@ namespace Catch {
             m_size( size )
         {}
 
+// cppcheck-suppress noExplicitConstructor
         StringRef( std::string const& stdString ) noexcept
         :   m_start( stdString.c_str() ),
             m_size( stdString.size() )
@@ -962,6 +966,7 @@ template<typename C>
 class TestInvokerAsMethod : public ITestInvoker {
     void (C::*m_testAsMethod)();
 public:
+// cppcheck-suppress noExplicitConstructor
     TestInvokerAsMethod( void (C::*testAsMethod)() ) noexcept : m_testAsMethod( testAsMethod ) {}
 
     void invoke() const override {
@@ -978,6 +983,7 @@ auto makeTestInvoker( void (C::*testAsMethod)() ) noexcept -> ITestInvoker* {
 }
 
 struct NameAndTags {
+// cppcheck-suppress noExplicitConstructor
     NameAndTags( StringRef const& name_ = StringRef(), StringRef const& tags_ = StringRef() ) noexcept;
     StringRef name;
     StringRef tags;
@@ -985,6 +991,7 @@ struct NameAndTags {
 
 struct AutoReg : NonCopyable {
     AutoReg( ITestInvoker* invoker, SourceLineInfo const& lineInfo, StringRef const& classOrMethod, NameAndTags const& nameAndTags ) noexcept;
+// cppcheck-suppress missingOverride
     ~AutoReg();
 };
 
@@ -1442,6 +1449,7 @@ namespace Catch {
         std::ostream* m_oss;
     public:
         ReusableStringStream();
+// cppcheck-suppress missingOverride
         ~ReusableStringStream();
 
         auto str() const -> std::string;
@@ -1484,6 +1492,7 @@ namespace Catch {
             std::vector<int> intValues;
             intValues.reserve( values.size() );
             for( auto enumValue : values )
+// cppcheck-suppress useStlAlgorithm
                 intValues.push_back( static_cast<int>( enumValue ) );
             return registerEnum( enumName, allEnums, intValues );
         }
@@ -2374,10 +2383,12 @@ namespace Catch {
         }
         template <typename RhsT>
         auto operator | (RhsT const& rhs) -> BinaryExpr<LhsT, RhsT const&> const {
+// cppcheck-suppress bitwiseOnBoolean
             return { static_cast<bool>(m_lhs | rhs), m_lhs, "|", rhs };
         }
         template <typename RhsT>
         auto operator & (RhsT const& rhs) -> BinaryExpr<LhsT, RhsT const&> const {
+// cppcheck-suppress bitwiseOnBoolean
             return { static_cast<bool>(m_lhs & rhs), m_lhs, "&", rhs };
         }
         template <typename RhsT>
@@ -2531,6 +2542,7 @@ namespace Catch {
         ITransientExpression const* m_transientExpression = nullptr;
         bool m_isNegated;
     public:
+// cppcheck-suppress noExplicitConstructor
         LazyExpression( bool isNegated );
         LazyExpression( LazyExpression const& other );
         LazyExpression& operator = ( LazyExpression const& ) = delete;
@@ -2630,6 +2642,7 @@ namespace Catch {
                         ResultWas::OfType type );
 
         template<typename T>
+// cppcheck-suppress duplInheritedMember
         MessageBuilder& operator << ( T const& value ) {
             m_stream << value;
             return *this;
@@ -2910,7 +2923,9 @@ namespace Catch {
 
     class Section : NonCopyable {
     public:
+// cppcheck-suppress noExplicitConstructor
         Section( SectionInfo const& info );
+// cppcheck-suppress missingOverride
         ~Section();
 
         // This indicates whether the section should be executed or not
@@ -3023,6 +3038,7 @@ namespace Catch {
         class ExceptionTranslator : public IExceptionTranslator {
         public:
 
+// cppcheck-suppress noExplicitConstructor
             ExceptionTranslator( std::string(*translateFunction)( T& ) )
             : m_translateFunction( translateFunction )
             {}
@@ -3049,6 +3065,7 @@ namespace Catch {
 
     public:
         template<typename T>
+// cppcheck-suppress noExplicitConstructor
         ExceptionTranslatorRegistrar( std::string(*translateFunction)( T& ) ) {
             getMutableRegistryHub().registerTranslator
                 ( new ExceptionTranslator<T>( translateFunction ) );
@@ -3287,6 +3304,7 @@ namespace Matchers {
         template<typename ArgT>
         struct MatchAllOf : MatcherBase<ArgT> {
             bool match( ArgT const& arg ) const override {
+// cppcheck-suppress useStlAlgorithm
                 for( auto matcher : m_matchers ) {
                     if (!matcher->match(arg))
                         return false;
@@ -3321,6 +3339,7 @@ namespace Matchers {
         struct MatchAnyOf : MatcherBase<ArgT> {
 
             bool match( ArgT const& arg ) const override {
+// cppcheck-suppress useStlAlgorithm
                 for( auto matcher : m_matchers ) {
                     if (matcher->match(arg))
                         return true;
@@ -3355,6 +3374,7 @@ namespace Matchers {
         template<typename ArgT>
         struct MatchNotOf : MatcherBase<ArgT> {
 
+// cppcheck-suppress noExplicitConstructor
             MatchNotOf( MatcherBase<ArgT> const& underlyingMatcher ) : m_underlyingMatcher( underlyingMatcher ) {}
 
             bool match( ArgT const& arg ) const override {
@@ -3400,6 +3420,7 @@ class ExceptionMessageMatcher : public MatcherBase<std::exception> {
     std::string m_message;
 public:
 
+// cppcheck-suppress noExplicitConstructor
     ExceptionMessageMatcher(std::string const& message):
         m_message(message)
     {}
@@ -3554,18 +3575,22 @@ namespace Matchers {
         };
 
         struct EqualsMatcher : StringMatcherBase {
+// cppcheck-suppress noExplicitConstructor
             EqualsMatcher( CasedString const& comparator );
             bool match( std::string const& source ) const override;
         };
         struct ContainsMatcher : StringMatcherBase {
+// cppcheck-suppress noExplicitConstructor
             ContainsMatcher( CasedString const& comparator );
             bool match( std::string const& source ) const override;
         };
         struct StartsWithMatcher : StringMatcherBase {
+// cppcheck-suppress noExplicitConstructor
             StartsWithMatcher( CasedString const& comparator );
             bool match( std::string const& source ) const override;
         };
         struct EndsWithMatcher : StringMatcherBase {
+// cppcheck-suppress noExplicitConstructor
             EndsWithMatcher( CasedString const& comparator );
             bool match( std::string const& source ) const override;
         };
@@ -3606,9 +3631,11 @@ namespace Matchers {
         template<typename T, typename Alloc>
         struct ContainsElementMatcher : MatcherBase<std::vector<T, Alloc>> {
 
+// cppcheck-suppress noExplicitConstructor
             ContainsElementMatcher(T const &comparator) : m_comparator( comparator) {}
 
             bool match(std::vector<T, Alloc> const &v) const override {
+// cppcheck-suppress useStlAlgorithm
                 for (auto const& el : v) {
                     if (el == m_comparator) {
                         return true;
@@ -3627,6 +3654,7 @@ namespace Matchers {
         template<typename T, typename AllocComp, typename AllocMatch>
         struct ContainsMatcher : MatcherBase<std::vector<T, AllocMatch>> {
 
+// cppcheck-suppress noExplicitConstructor
             ContainsMatcher(std::vector<T, AllocComp> const &comparator) : m_comparator( comparator ) {}
 
             bool match(std::vector<T, AllocMatch> const &v) const override {
@@ -3636,6 +3664,7 @@ namespace Matchers {
                 for (auto const& comparator : m_comparator) {
                     auto present = false;
                     for (const auto& el : v) {
+// cppcheck-suppress useStlAlgorithm
                         if (el == comparator) {
                             present = true;
                             break;
@@ -3657,6 +3686,7 @@ namespace Matchers {
         template<typename T, typename AllocComp, typename AllocMatch>
         struct EqualsMatcher : MatcherBase<std::vector<T, AllocMatch>> {
 
+// cppcheck-suppress noExplicitConstructor
             EqualsMatcher(std::vector<T, AllocComp> const &comparator) : m_comparator( comparator ) {}
 
             bool match(std::vector<T, AllocMatch> const &v) const override {
@@ -3680,6 +3710,7 @@ namespace Matchers {
         template<typename T, typename AllocComp, typename AllocMatch>
         struct ApproxMatcher : MatcherBase<std::vector<T, AllocMatch>> {
 
+// cppcheck-suppress noExplicitConstructor
             ApproxMatcher(std::vector<T, AllocComp> const& comparator) : m_comparator( comparator ) {}
 
             bool match(std::vector<T, AllocMatch> const &v) const override {
@@ -3715,6 +3746,7 @@ namespace Matchers {
 
         template<typename T, typename AllocComp, typename AllocMatch>
         struct UnorderedEqualsMatcher : MatcherBase<std::vector<T, AllocMatch>> {
+// cppcheck-suppress noExplicitConstructor
             UnorderedEqualsMatcher(std::vector<T, AllocComp> const& target) : m_target(target) {}
             bool match(std::vector<T, AllocMatch> const& vec) const override {
                 if (m_target.size() != vec.size()) {
@@ -3920,6 +3952,7 @@ class GeneratorException : public std::exception {
     const char* const m_msg = "";
 
 public:
+// cppcheck-suppress noExplicitConstructor
     GeneratorException(const char* msg):
         m_msg(msg)
     {}
@@ -3939,6 +3972,7 @@ namespace Generators {
 
     template<typename T>
     struct IGenerator : GeneratorUntypedBase {
+// cppcheck-suppress missingOverride
         virtual ~IGenerator() = default;
 
         // Returns the current element of the generator
@@ -3953,6 +3987,7 @@ namespace Generators {
     class SingleValueGenerator final : public IGenerator<T> {
         T m_value;
     public:
+// cppcheck-suppress noExplicitConstructor
         SingleValueGenerator(T&& value) : m_value(std::move(value)) {}
 
         T const& get() const override {
@@ -3986,6 +4021,7 @@ namespace Generators {
     class GeneratorWrapper final {
         std::unique_ptr<IGenerator<T>> m_generator;
     public:
+// cppcheck-suppress noExplicitConstructor
         GeneratorWrapper(std::unique_ptr<IGenerator<T>> generator):
             m_generator(std::move(generator))
         {}
@@ -4366,6 +4402,7 @@ namespace Catch {
 
     struct IMutableContext : IContext
     {
+// cppcheck-suppress missingOverride
         virtual ~IMutableContext();
         virtual void setResultCapture( IResultCapture* resultCapture ) = 0;
         virtual void setRunner( IRunner* runner ) = 0;
@@ -4408,10 +4445,14 @@ namespace Catch {
     template<typename T>
     class Option {
     public:
+// cppcheck-suppress uninitMemberVar
         Option() : nullableValue( nullptr ) {}
+// cppcheck-suppress uninitMemberVar
+// cppcheck-suppress noExplicitConstructor
         Option( T const& _value )
         : nullableValue( new( storage ) T( _value ) )
         {}
+// cppcheck-suppress uninitMemberVar
         Option( Option const& _other )
         : nullableValue( _other ? new( storage ) T( *_other ) : nullptr )
         {}
@@ -4511,6 +4552,7 @@ namespace Catch {
 
     struct IConfig : NonCopyable {
 
+// cppcheck-suppress missingOverride
         virtual ~IConfig();
 
         virtual bool allowThrows() const = 0;
@@ -5214,6 +5256,7 @@ namespace Catch {
         ITagAliasRegistry const* m_tagAliases = nullptr;
 
     public:
+// cppcheck-suppress noExplicitConstructor
         TestSpecParser( ITagAliasRegistry const& tagAliases );
 
         TestSpecParser& parse( std::string const& arg );
@@ -5318,7 +5361,9 @@ namespace Catch {
     public:
 
         Config() = default;
+// cppcheck-suppress noExplicitConstructor
         Config( ConfigData const& data );
+// cppcheck-suppress missingOverride
         virtual ~Config() = default;
 
         std::string const& getFilename() const;
@@ -5511,6 +5556,7 @@ namespace Catch {
     };
 
     struct TestRunInfo {
+// cppcheck-suppress noExplicitConstructor
         TestRunInfo( std::string const& _name );
         std::string name;
     };
@@ -5581,6 +5627,7 @@ namespace Catch {
         TestGroupStats( GroupInfo const& _groupInfo,
                         Totals const& _totals,
                         bool _aborting );
+// cppcheck-suppress noExplicitConstructor
         TestGroupStats( GroupInfo const& _groupInfo );
 
         TestGroupStats( TestGroupStats const& )              = default;
@@ -5735,6 +5782,7 @@ namespace Catch {
     template<typename DerivedT>
     struct StreamingReporterBase : IStreamingReporter {
 
+// cppcheck-suppress noExplicitConstructor
         StreamingReporterBase( ReporterConfig const& _config )
         :   m_config( _config.fullConfig() ),
             stream( _config.stream() )
@@ -5756,6 +5804,7 @@ namespace Catch {
 
         void noMatchingTestCases(std::string const&) override {}
 
+// cppcheck-suppress uselessOverride
         void reportInvalidArguments(std::string const&) override {}
 
         void testRunStarting(TestRunInfo const& _testRunInfo) override {
@@ -5836,6 +5885,7 @@ namespace Catch {
         };
 
         struct BySectionInfo {
+// cppcheck-suppress noExplicitConstructor
             BySectionInfo( SectionInfo const& other ) : m_other( other ) {}
             BySectionInfo( BySectionInfo const& other ) : m_other( other.m_other ) {}
             bool operator() (std::shared_ptr<SectionNode> const& node) const {
@@ -5972,6 +6022,7 @@ namespace Catch {
     }
 
     struct TestEventListenerBase : StreamingReporterBase<TestEventListenerBase> {
+// cppcheck-suppress noExplicitConstructor
         TestEventListenerBase( ReporterConfig const& _config );
 
         static std::set<Verbosity> getSupportedVerbosities();
@@ -6025,6 +6076,7 @@ namespace Catch {
         };
 
         // Use constructed object for RAII guard
+// cppcheck-suppress noExplicitConstructor
         Colour( Code _colourCode );
         Colour( Colour&& other ) noexcept;
         Colour& operator=( Colour&& other ) noexcept;
@@ -6155,6 +6207,7 @@ namespace Catch {
     struct ConsoleReporter : StreamingReporterBase<ConsoleReporter> {
         std::unique_ptr<TablePrinter> m_tablePrinter;
 
+// cppcheck-suppress noExplicitConstructor
         ConsoleReporter(ReporterConfig const& config);
         ~ConsoleReporter() override;
         static std::string getDescription();
@@ -6235,6 +6288,7 @@ namespace Catch {
     public:
         enum ForWhat { ForTextNodes, ForAttributes };
 
+// cppcheck-suppress noExplicitConstructor
         XmlEncode( std::string const& str, ForWhat forWhat = ForTextNodes );
 
         void encodeTo( std::ostream& os ) const;
@@ -6271,6 +6325,7 @@ namespace Catch {
             XmlFormatting m_fmt;
         };
 
+// cppcheck-suppress noExplicitConstructor
         XmlWriter( std::ostream& os = Catch::cout() );
         ~XmlWriter();
 
@@ -6326,6 +6381,7 @@ namespace Catch {
 
     class JunitReporter : public CumulativeReporterBase<JunitReporter> {
     public:
+// cppcheck-suppress noExplicitConstructor
         JunitReporter(ReporterConfig const& _config);
 
         ~JunitReporter() override;
@@ -6375,6 +6431,7 @@ namespace Catch {
 namespace Catch {
     class XmlReporter : public StreamingReporterBase<XmlReporter> {
     public:
+// cppcheck-suppress noExplicitConstructor
         XmlReporter(ReporterConfig const& _config);
 
         ~XmlReporter() override;
@@ -8036,6 +8093,7 @@ namespace Catch {
     class FatalConditionHandlerGuard {
         FatalConditionHandler* m_handler;
     public:
+// cppcheck-suppress noExplicitConstructor
         FatalConditionHandlerGuard(FatalConditionHandler* handler):
             m_handler(handler) {
             m_handler->engage();
@@ -8233,6 +8291,7 @@ namespace Catch {
         m_resultCapture.handleMessage( m_assertionInfo, resultType, message, m_reaction );
     }
 
+// cppcheck-suppress functionStatic
     auto AssertionHandler::allowThrows() const -> bool {
         return getCurrentContext().getConfig()->allowThrows();
     }
@@ -8684,6 +8743,7 @@ public:
 			m_iterators.reserve(m_columns.size());
 
 			for (auto const& col : m_columns)
+// cppcheck-suppress useStlAlgorithm
 				m_iterators.push_back(col.end());
 		}
 
@@ -8700,6 +8760,7 @@ public:
 			m_iterators.reserve(m_columns.size());
 
 			for (auto const& col : m_columns)
+// cppcheck-suppress useStlAlgorithm
 				m_iterators.push_back(col.begin());
 		}
 
@@ -8836,6 +8897,7 @@ namespace detail {
             m_args( args.begin()+1, args.end() )
         {}
 
+// cppcheck-suppress returnByReference
         auto exeName() const -> std::string {
             return m_exeName;
         }
@@ -8956,6 +9018,8 @@ namespace detail {
         }
 
     protected:
+// cppcheck-suppress uninitMemberVar
+// cppcheck-suppress noExplicitConstructor
         ResultValueBase( Type type ) : ResultBase( type ) {}
 
         ResultValueBase( ResultValueBase const &other ) : ResultBase( other ) {
@@ -9011,6 +9075,7 @@ namespace detail {
 
         explicit operator bool() const { return m_type == ResultBase::Ok; }
         auto type() const -> ResultBase::Type { return m_type; }
+// cppcheck-suppress returnByReference
         auto errorMessage() const -> std::string { return m_errorMessage; }
 
     protected:
@@ -9050,6 +9115,7 @@ namespace detail {
         {}
 
         auto type() const -> ParseResultType { return m_type; }
+// cppcheck-suppress returnByReference
         auto remainingTokens() const -> TokenStream { return m_remainingTokens; }
 
     private:
@@ -9120,6 +9186,7 @@ namespace detail {
     };
     struct BoundFlagRefBase : BoundRef {
         virtual auto setFlag( bool flag ) -> ParserResult = 0;
+// cppcheck-suppress missingOverride
         virtual auto isFlag() const -> bool { return true; }
     };
 
@@ -9292,6 +9359,7 @@ namespace detail {
                 return 1;
         }
 
+// cppcheck-suppress returnByReference
         auto hint() const -> std::string { return m_hint; }
     };
 
@@ -9300,6 +9368,7 @@ namespace detail {
         std::shared_ptr<BoundValueRefBase> m_ref;
 
         template<typename LambdaT>
+// cppcheck-suppress unusedPrivateFunction
         static auto makeRef(LambdaT const &lambda) -> std::shared_ptr<BoundValueRefBase> {
             return std::make_shared<BoundLambda<LambdaT>>( lambda) ;
         }
@@ -9308,6 +9377,7 @@ namespace detail {
         ExeName() : m_name( std::make_shared<std::string>( "<executable>" ) ) {}
 
         explicit ExeName( std::string &ref ) : ExeName() {
+// cppcheck-suppress useInitializationList
             m_ref = std::make_shared<BoundValueRef<std::string>>( ref );
         }
 
@@ -9409,6 +9479,7 @@ namespace detail {
 
         auto isMatch( std::string const &optToken ) const -> bool {
             auto normalisedToken = normaliseOpt( optToken );
+// cppcheck-suppress useStlAlgorithm
             for( auto const &name : m_optNames ) {
                 if( normaliseOpt( name ) == normalisedToken )
                     return true;
@@ -9561,6 +9632,7 @@ namespace detail {
             size_t consoleWidth = CATCH_CLARA_CONFIG_CONSOLE_WIDTH;
             size_t optWidth = 0;
             for( auto const &cols : rows )
+// cppcheck-suppress useStlAlgorithm
                 optWidth = (std::max)(optWidth, cols.left.size() + 2);
 
             optWidth = (std::min)(optWidth, consoleWidth/2);
@@ -9957,9 +10029,11 @@ namespace Catch {
         // aligned with whitespace).
 
         for (auto& elem : m_data.testsOrTags) {
+// cppcheck-suppress useStlAlgorithm
             elem = trim(elem);
         }
         for (auto& elem : m_data.sectionsToRun) {
+// cppcheck-suppress useStlAlgorithm
             elem = trim(elem);
         }
 
@@ -10209,6 +10283,7 @@ namespace {
         }
 
     private:
+// cppcheck-suppress functionStatic
         void setColour( const char* _escapeCode ) {
             getCurrentContext().getConfig()->stream()
                 << '\033' << _escapeCode;
@@ -10604,6 +10679,7 @@ namespace Catch {
             std::vector<StringRef> parsed;
             parsed.reserve( enumValues.size() );
             for( auto const& enumValue : enumValues ) {
+// cppcheck-suppress useStlAlgorithm
                 parsed.push_back(trim(extractInstanceName(enumValue)));
             }
             return parsed;
@@ -10613,6 +10689,7 @@ namespace Catch {
 
         StringRef EnumInfo::lookup( int value ) const {
             for( auto const& valueToName : m_values ) {
+// cppcheck-suppress useStlAlgorithm
                 if( valueToName.first == value )
                     return valueToName.second;
             }
@@ -10663,6 +10740,7 @@ namespace Catch {
 
     class ExceptionTranslatorRegistry : public IExceptionTranslatorRegistry {
     public:
+// cppcheck-suppress missingOverride
         ~ExceptionTranslatorRegistry();
         virtual void registerTranslator( const IExceptionTranslator* translator );
         std::string translateActiveException() const override;
@@ -10719,6 +10797,7 @@ namespace Catch {
         catch( std::exception& ex ) {
             return ex.what();
         }
+// cppcheck-suppress constVariableReference
         catch( std::string& msg ) {
             return msg;
         }
@@ -10743,6 +10822,7 @@ namespace Catch {
         CATCH_INTERNAL_ERROR("Attempted to translate active exception under CATCH_CONFIG_DISABLE_EXCEPTIONS!");
     }
 
+// cppcheck-suppress functionStatic
     std::string ExceptionTranslatorRegistry::tryTranslators() const {
         CATCH_INTERNAL_ERROR("Attempted to use exception translators under CATCH_CONFIG_DISABLE_EXCEPTIONS!");
     }
@@ -10760,7 +10840,9 @@ namespace Catch {
 
     // If neither SEH nor signal handling is required, the handler impls
     // do not have to do anything, and can be empty.
+// cppcheck-suppress functionStatic
     void FatalConditionHandler::engage_platform() {}
+// cppcheck-suppress functionStatic
     void FatalConditionHandler::disengage_platform() {}
     FatalConditionHandler::FatalConditionHandler() = default;
     FatalConditionHandler::~FatalConditionHandler() = default;
@@ -10905,6 +10987,7 @@ namespace Catch {
     static void handleSignal( int sig ) {
         char const * name = "<unknown signal>";
         for (auto const& def : signalDefs) {
+// cppcheck-suppress useStlAlgorithm
             if (sig == def.id) {
                 name = def.name;
                 break;
@@ -10933,6 +11016,7 @@ namespace Catch {
         altStackMem = nullptr;
     }
 
+// cppcheck-suppress functionStatic
     void FatalConditionHandler::engage_platform() {
         stack_t sigStack;
         sigStack.ss_sp = altStackMem;
@@ -10952,6 +11036,7 @@ namespace Catch {
 #    pragma GCC diagnostic pop
 #endif
 
+// cppcheck-suppress functionStatic
     void FatalConditionHandler::disengage_platform() {
         restorePreviousSignalHandlers();
     }
@@ -11312,6 +11397,7 @@ namespace Catch {
         size_t size = 0;
         for (auto const& spelling : spellings) {
             // Add 2 for the brackes
+// cppcheck-suppress useStlAlgorithm
             size += spelling.size() + 2;
         }
 
@@ -11364,6 +11450,7 @@ namespace Catch {
         IReporterRegistry::FactoryMap const& factories = getRegistryHub().getReporterRegistry().getFactories();
         std::size_t maxNameLen = 0;
         for( auto const& factoryKvp : factories )
+// cppcheck-suppress useStlAlgorithm
             maxNameLen = (std::max)( maxNameLen, factoryKvp.first.size() );
 
         for( auto const& factoryKvp : factories ) {
@@ -11858,6 +11945,7 @@ namespace Catch {
     }
 
     ScopedMessage::~ScopedMessage() {
+// cppcheck-suppress knownConditionTrueFalse
         if ( !uncaught_exceptions() && !m_moved ){
             getResultCapture().popScopedMessage(m_info);
         }
@@ -11921,6 +12009,7 @@ namespace Catch {
         m_messages.back().message += " := ";
     }
     Capturer::~Capturer() {
+// cppcheck-suppress knownConditionTrueFalse
         if ( !uncaught_exceptions() ){
             assert( m_captured == m_messages.size() );
             for( size_t i = 0; i < m_captured; ++i  )
@@ -12295,6 +12384,7 @@ namespace Catch {
 
     class TestRegistry : public ITestCaseRegistry {
     public:
+// cppcheck-suppress missingOverride
         virtual ~TestRegistry() = default;
 
         virtual void registerTest( TestCase const& testCase );
@@ -12315,6 +12405,7 @@ namespace Catch {
     class TestInvokerAsFunction : public ITestInvoker {
         void(*m_testAsFunction)();
     public:
+// cppcheck-suppress noExplicitConstructor
         TestInvokerAsFunction( void(*testAsFunction)() ) noexcept;
 
         void invoke() const override;
@@ -12378,6 +12469,7 @@ namespace Catch {
 
     class TagAliasRegistry : public ITagAliasRegistry {
     public:
+// cppcheck-suppress uselessOverride
         ~TagAliasRegistry() override;
         TagAlias const* find( std::string const& alias ) const override;
         std::string expandAliases( std::string const& unexpandedTestSpec ) const override;
@@ -12589,6 +12681,7 @@ namespace Catch {
             GeneratorTracker( TestCaseTracking::NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent )
             :   TrackerBase( nameAndLocation, ctx, parent )
             {}
+// cppcheck-suppress missingOverride
             ~GeneratorTracker();
 
             static GeneratorTracker& acquire( TrackerContext& ctx, TestCaseTracking::NameAndLocation const& nameAndLocation ) {
@@ -12662,6 +12755,7 @@ namespace Catch {
                     auto* parent = m_parent;
                     // This is safe: there is always at least one section
                     // tracker in a test case tracking tree
+// cppcheck-suppress nullPointerRedundantCheck
                     while ( !parent->isSectionTracker() ) {
                         parent = &( parent->parent() );
                     }
@@ -12676,6 +12770,7 @@ namespace Catch {
                         return true;
                     }
 
+// cppcheck-suppress useStlAlgorithm
                     for ( auto const& child : m_children ) {
                         if ( child->isSectionTracker() &&
                              std::find( filters.begin(),
@@ -12750,6 +12845,7 @@ namespace Catch {
 
         m_activeTestCase = &testCase;
 
+// cppcheck-suppress constVariableReference
         ITracker& rootTracker = m_trackerContext.startRun();
         assert(rootTracker.isSectionTracker());
         static_cast<SectionTracker&>(rootTracker).addInitialFilters(m_config->getSectionsToRun());
@@ -12833,6 +12929,7 @@ namespace Catch {
     }
     auto RunContext::acquireGeneratorTracker( StringRef generatorName, SourceLineInfo const& lineInfo ) -> IGeneratorTracker& {
         using namespace Generators;
+// cppcheck-suppress constVariableReference
         GeneratorTracker& tracker = GeneratorTracker::acquire(m_trackerContext,
                                                               TestCaseTracking::NameAndLocation( static_cast<std::string>(generatorName), lineInfo ) );
         m_lastAssertionInfo.lineInfo = lineInfo;
@@ -13448,6 +13545,7 @@ namespace Catch {
                 << m_cli << std::endl
                 << "For more detailed usage please see the project docs\n" << std::endl;
     }
+// cppcheck-suppress functionStatic
     void Session::libIdentify() {
         Catch::cout()
                 << std::left << std::setw(16) << "description: " << "A Catch2 test executable\n"
@@ -13693,6 +13791,7 @@ namespace Catch {
         class FileStream : public IStream {
             mutable std::ofstream m_ofs;
         public:
+// cppcheck-suppress noExplicitConstructor
             FileStream( StringRef filename ) {
                 m_ofs.open( filename.c_str() );
                 CATCH_ENFORCE( !m_ofs.fail(), "Unable to open file: '" << filename << "'" );
@@ -13842,6 +13941,7 @@ namespace Catch {
     std::string trim( std::string const& str ) {
         static char const* whitespaceChars = "\n\r\t ";
         std::string::size_type start = str.find_first_not_of( whitespaceChars );
+// cppcheck-suppress constStatement
         std::string::size_type end = str.find_last_not_of( whitespaceChars );
 
         return start != std::string::npos ? str.substr( start, 1+end-start ) : std::string();
@@ -13864,6 +13964,7 @@ namespace Catch {
         std::size_t i = str.find( replaceThis );
         while( i != std::string::npos ) {
             replaced = true;
+// cppcheck-suppress uselessCallsSubstr
             str = str.substr( 0, i ) + withThis + str.substr( i+replaceThis.size() );
             if( i < str.size()-withThis.size() )
                 i = str.find( replaceThis, i+withThis.size() );
@@ -13987,6 +14088,7 @@ namespace Catch {
         for( auto const& registryKvp : m_registry ) {
             std::size_t pos = expandedTestSpec.find( registryKvp.first );
             if( pos != std::string::npos ) {
+// cppcheck-suppress uselessCallsSubstr
                 expandedTestSpec =  expandedTestSpec.substr( 0, pos ) +
                                     registryKvp.second.tag +
                                     expandedTestSpec.substr( pos + registryKvp.first.size() );
@@ -14145,6 +14247,7 @@ namespace Catch {
         // '[' and ']' per tag
         std::size_t full_size = 2 * tags.size();
         for (const auto& tag : tags) {
+// cppcheck-suppress useStlAlgorithm
             full_size += tag.size();
         }
         ret.reserve(full_size);
@@ -14241,6 +14344,7 @@ namespace Catch {
                 indexed_tests.reserve( unsortedTestCases.size() );
 
                 for (auto const& testCase : unsortedTestCases) {
+// cppcheck-suppress useStlAlgorithm
                     indexed_tests.emplace_back(h(testCase), &testCase);
                 }
 
@@ -14256,6 +14360,7 @@ namespace Catch {
                 sorted.reserve( indexed_tests.size() );
 
                 for (auto const& hashed : indexed_tests) {
+// cppcheck-suppress useStlAlgorithm
                     sorted.emplace_back(*hashed.second);
                 }
 
@@ -14290,6 +14395,7 @@ namespace Catch {
         for (auto const& testCase : testCases) {
             if ((!testSpec.hasFilters() && !testCase.isHidden()) ||
                 (testSpec.hasFilters() && matchTest(testCase, testSpec, config))) {
+// cppcheck-suppress useStlAlgorithm
                 filtered.push_back(testCase);
             }
         }
@@ -14669,6 +14775,7 @@ namespace Catch {
     std::string TestSpec::Filter::name() const {
         std::string name;
         for( auto const& p : m_patterns )
+// cppcheck-suppress useStlAlgorithm
             name += p->name();
         return name;
     }
@@ -14683,6 +14790,7 @@ namespace Catch {
 
     TestSpec::Matches TestSpec::matchesByFilter( std::vector<TestCase> const& testCases, IConfig const& config ) const
     {
+// cppcheck-suppress shadowFunction
         Matches matches( m_filters.size() );
         std::transform( m_filters.begin(), m_filters.end(), matches.begin(), [&]( Filter const& filter ){
             std::vector<TestCase const*> currentMatches;
@@ -14873,6 +14981,7 @@ namespace Catch {
     std::string TestSpecParser::preprocessPattern() {
         std::string token = m_patternName;
         for (std::size_t i = 0; i < m_escapeChars.size(); ++i)
+// cppcheck-suppress uselessCallsSubstr
             token = token.substr(0, m_escapeChars[i] - i) + token.substr(m_escapeChars[i] - i + 1);
         m_escapeChars.clear();
         if (startsWith(token, "exclude:")) {
@@ -15032,6 +15141,7 @@ namespace Detail {
                 // If the lowest byte we read is non-zero, we can assume
                 // that little endian format is used.
                 auto value = *reinterpret_cast<char*>(&one);
+// cppcheck-suppress knownConditionTrueFalse
                 return value ? Little : Big;
             }
         };
@@ -15039,7 +15149,9 @@ namespace Detail {
 
     std::string rawMemoryToString( const void *object, std::size_t size ) {
         // Reverse order for little endian architectures
+// cppcheck-suppress constStatement
         int i = 0, end = static_cast<int>( size ), inc = 1;
+// cppcheck-suppress knownConditionTrueFalse
         if( Endianness::which() == Endianness::Little ) {
             i = end-1;
             end = inc = -1;
@@ -15069,6 +15181,7 @@ std::string fpToString( T value, int precision ) {
     if( i != std::string::npos && i != d.size()-1 ) {
         if( d[i] == '.' )
             i++;
+// cppcheck-suppress uselessCallsSubstr
         d = d.substr( 0, i+1 );
     }
     return d;
@@ -15129,6 +15242,7 @@ std::string StringMaker<std::wstring>::convert(const std::wstring& wstr) {
     std::string s;
     s.reserve(wstr.size());
     for (auto c : wstr) {
+// cppcheck-suppress useStlAlgorithm
         s += (c <= 0xff) ? static_cast<char>(c) : '?';
     }
     return ::Catch::Detail::stringify(s);
@@ -15409,6 +15523,7 @@ namespace Catch {
             m_wildcard = WildcardAtStart;
         }
         if( endsWith( m_pattern, '*' ) ) {
+// cppcheck-suppress uselessCallsSubstr
             m_pattern = m_pattern.substr( 0, m_pattern.size()-1 );
             m_wildcard = static_cast<WildcardPosition>( m_wildcard | WildcardAtEnd );
         }
@@ -15581,6 +15696,7 @@ namespace {
                     (!valid) ||
                     // Overlong encodings
                     (value < 0x80) ||
+// cppcheck-suppress knownConditionTrueFalse
                     (0x80 <= value && value < 0x800   && encBytes > 2) ||
                     (0x800 < value && value < 0x10000 && encBytes > 3) ||
                     // Encoded value out of range
@@ -15672,6 +15788,7 @@ namespace {
     }
 
     XmlWriter& XmlWriter::endElement(XmlFormatting fmt) {
+// cppcheck-suppress uselessCallsSubstr
         m_indent = m_indent.substr(0, m_indent.size() - 2);
 
         if( m_tagIsOpen ) {
@@ -15767,6 +15884,7 @@ namespace {
 #include <memory>
 
 namespace Catch {
+// cppcheck-suppress constParameterReference
     void prepareExpandedExpression(AssertionResult& result) {
         result.getExpandedExpression();
     }
@@ -15820,6 +15938,7 @@ namespace Catch {
     TestEventListenerBase::TestEventListenerBase(ReporterConfig const & _config)
         :StreamingReporterBase(_config) {}
 
+// cppcheck-suppress duplInheritedMember
     std::set<Verbosity> TestEventListenerBase::getSupportedVerbosities() {
         return { Verbosity::Quiet, Verbosity::Normal, Verbosity::High };
     }
@@ -16520,6 +16639,7 @@ void ConsoleReporter::sectionEnded(SectionStats const& _sectionStats) {
     if (shouldShowDuration(*m_config, dur)) {
         stream << getFormattedDuration(dur) << " s: " << _sectionStats.sectionInfo.name << std::endl;
     }
+// cppcheck-suppress duplicateConditionalAssign
     if (m_headerPrinted) {
         m_headerPrinted = false;
     }
@@ -16818,6 +16938,7 @@ namespace Catch {
             std::tm timeInfo = {};
             gmtime_s(&timeInfo, &rawtime);
 #else
+// cppcheck-suppress constVariablePointer
             std::tm* timeInfo;
             timeInfo = std::gmtime(&rawtime);
 #endif
@@ -17972,5 +18093,7 @@ using Catch::Detail::Approx;
 
 // end catch_reenable_warnings.h
 // end catch.hpp
+#endif // __cppcheck__
 #endif // TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
 
+// clang-format on

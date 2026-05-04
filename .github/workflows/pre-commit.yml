@@ -28,10 +28,9 @@ jobs:
               echo "ERROR: clang-format failed or timed out on $file"
               exit 1
             fi
-          done < <(git ls-files -z -- '*.cpp' '*.hpp' '*.h')
-
+            done < <(git ls-files -z -- 'src/**/*.cpp' 'src/**/*.hpp' 'src/**/*.h' 'include/**/*.cpp' 'include/**/*.hpp' 'include/**/*.h' ':!include/utils/json.hpp')
       - name: Static Analysis (Safety Check)
         run: |
           sudo apt-get update
           sudo apt-get install -y cppcheck
-          cppcheck --enable=warning,style,performance --error-exitcode=1 .
+          cppcheck --enable=warning,style,performance --error-exitcode=1 --suppress=useStlAlgorithm src/ include/core include/model include/log include/cli

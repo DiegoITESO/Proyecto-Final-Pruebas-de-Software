@@ -6,7 +6,7 @@ LogisticRegression::LogisticRegression(size_t n_features) {
   loss = 0.0;
 }
 
-double LogisticRegression::sigmoid(const double z) const {
+double LogisticRegression::sigmoid(const double z) {
   return 1.0 / (1.0 + std::exp(-z));
 }
 
@@ -37,7 +37,7 @@ void LogisticRegression::train(const ProcessedData& data, double alpha,
 }
 
 double LogisticRegression::computeLoss(const double y_true,
-                                       const double y_pred) const {
+                                       const double y_pred) {
   double y_hat = std::min(std::max(y_pred, 1e-15), 1.0 - 1e-15);
   return -((y_true * std::log(y_hat)) + ((1 - y_true) * std::log(1 - y_hat)));
 }
@@ -45,13 +45,13 @@ double LogisticRegression::computeLoss(const double y_true,
 void LogisticRegression::updateWeights(const ProcessedData& data,
                                        const double& alpha) {
   for (size_t i = 0; i < data.features.size(); ++i) {
-    double gradient;
     double prediction = predict(data.features[i]);
+    double error = prediction - data.churnResults[i];
     for (size_t j = 0; j < weights.size(); ++j) {
-      gradient = (prediction - data.churnResults[i]) * data.features[i][j];
+      double gradient = error * data.features[i][j];
       weights[j] -= alpha * gradient;
     }
-    bias -= alpha * (prediction - data.churnResults[i]);
+    bias -= alpha * error;
   }
 }
 

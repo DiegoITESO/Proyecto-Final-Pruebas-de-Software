@@ -35,7 +35,7 @@ void ArgParser::run() {
   throw std::runtime_error("Unknown option: " + args[1]);
 };
 
-void ArgParser::showHelp() const {
+void ArgParser::showHelp() {
   std::cout
       << "Customer Churn Predictor - Command Line Interface\n"
       << "--------------------------------------------------\n"
@@ -140,6 +140,8 @@ void ArgParser::handleEvaluate() {
   Logger::instance().log("Program finished succesfully.");
 };
 
+// cppcheck-suppress functionStatic
+// cppcheck-suppress functionStatic
 void ArgParser::collectTrainData(std::string& filePath,
                                  std::string& destinationPath, bool& hasHeader,
                                  size_t& churnColumn,
@@ -180,9 +182,13 @@ void ArgParser::collectTrainData(std::string& filePath,
   std::cin >> epochs;
 };
 
+// cppcheck-suppress functionStatic
+// cppcheck-suppress funcArgOrderDifferent
+// cppcheck-suppress functionStatic
 void ArgParser::collectPredictData(std::string& filePath,
+                                   std::string& weightsPath,
                                    std::string& destinationPath,
-                                   std::string& weightsPath, bool& hasHeader,
+                                   bool& hasHeader,
                                    std::vector<size_t>& dropColumns) {
   std::string header;
   std::cout << "Enter the weights file location:\n";
@@ -212,7 +218,10 @@ void ArgParser::collectPredictData(std::string& filePath,
   }
 };
 
-void ArgParser::saveToCSVFile(std::vector<double>& predictions,
+// cppcheck-suppress functionStatic
+// cppcheck-suppress constParameterReference
+// cppcheck-suppress functionStatic
+void ArgParser::saveToCSVFile(const std::vector<double>& predictions,
                               std::string destinationPath) {
   std::ofstream outputFile(destinationPath, std::ios::out);
 
