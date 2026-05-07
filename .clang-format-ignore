@@ -1,0 +1,2 @@
+# Third-party single-header library; formatting is upstream. CI skips it (see Style Enforcement workflow).
+include/utils/json.hpp

@@ -23,6 +23,12 @@ jobs:
         run: |
           set -euo pipefail
           while IFS= read -r -d '' file; do
+            case "$file" in
+              include/utils/json.hpp)
+                echo "Skipping vendor header $file (nlohmann/json; too large for per-PR clang-format timeout)"
+                continue
+                ;;
+            esac
             echo "Checking $file"
             if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
               echo "ERROR: clang-format failed or timed out on $file"
