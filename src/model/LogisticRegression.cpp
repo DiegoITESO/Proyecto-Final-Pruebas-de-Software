@@ -62,7 +62,7 @@ double LogisticRegression::accuracy(const ProcessedData& test) const {
       rightGuess++;
   }
   return rightGuess / static_cast<double>(test.features.size());
-};
+}
 
 double LogisticRegression::precision(const ProcessedData& test) const {
   size_t predicted_positives = 0;
@@ -74,7 +74,7 @@ double LogisticRegression::precision(const ProcessedData& test) const {
     }
   }
   return true_positives / static_cast<double>(predicted_positives);
-};
+}
 
 double LogisticRegression::recall(const ProcessedData& test) const {
   size_t correctly_predicted_positives = 0;
@@ -87,7 +87,7 @@ double LogisticRegression::recall(const ProcessedData& test) const {
     }
   }
   return correctly_predicted_positives / static_cast<double>(true_positives);
-};
+}
 
 double LogisticRegression::f1Score(const ProcessedData& test) const {
   double model_precision = precision(test);
@@ -95,7 +95,7 @@ double LogisticRegression::f1Score(const ProcessedData& test) const {
   if (model_precision + model_recall == 0.0) return 0.0;
   return 2.0 *
          ((model_precision * model_recall) / (model_precision + model_recall));
-};
+}
 
 void LogisticRegression::save(const std::string& filename) const {
   using json = nlohmann::json;
@@ -115,7 +115,7 @@ void LogisticRegression::save(const std::string& filename) const {
     logger.log("Unable to open file: " + filename);
     throw std::runtime_error("Unable to open file");
   }
-};
+}
 
 void LogisticRegression::load(const std::string& filename) {
   using json = nlohmann::json;
@@ -139,4 +139,4 @@ void LogisticRegression::load(const std::string& filename) {
     logger.log("Unable to open file: " + filename);
     throw std::runtime_error("Unable to open file: " + filename);
   }
-};
+}

@@ -4,12 +4,12 @@
 Logger& Logger::instance() {
   static Logger instance;
   return instance;
-};
+}
 
 void Logger::set_file(const std::string& filename) {
   std::lock_guard<std::mutex> lock(mutex_);
   file_.open(filename);
-};
+}
 
 void Logger::log(const std::string& message) {
   std::lock_guard<std::mutex> lock(mutex_);
@@ -21,10 +21,10 @@ void Logger::log(const std::string& message) {
   else
     std::cerr << std::put_time(local_tm, "%Y-%m-%d %H:%M:%S") << " | "
               << message << std::endl;
-};
+}
 
 void Logger::reset() {
   std::lock_guard<std::mutex> lock(mutex_);
   file_.close();
   file_.clear();
-};
+}

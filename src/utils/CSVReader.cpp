@@ -144,7 +144,7 @@ ProcessedData CSVReader::preprocess(
   }
   CSVReader::normalizeFeatures(result);
   return result;
-};
+}
 
 void CSVReader::normalizeFeatures(ProcessedData& data) {
   size_t numSamples = data.features.size();

@@ -2,7 +2,7 @@
 
 ArgParser::ArgParser(int argc, char* argv[]) {
   for (int i = 0; i < argc; ++i) args.push_back(argv[i]);
-};
+}
 
 void ArgParser::run() {
   auto now = std::chrono::system_clock::now();
@@ -33,7 +33,7 @@ void ArgParser::run() {
     return;
   }
   throw std::runtime_error("Unknown option: " + args[1]);
-};
+}
 
 void ArgParser::showHelp() const {
   std::cout
@@ -52,7 +52,7 @@ void ArgParser::showHelp() const {
       << "  ./logistic_churn --predict\n"
       << "Log files are saved under the 'logs/' directory with timestamped "
          "names.\n";
-};
+}
 
 void ArgParser::handleTrain() {
   std::string filePath, destinationPath;
@@ -77,7 +77,7 @@ void ArgParser::handleTrain() {
   model.save(destinationPath);
   Logger::instance().log("Success");
   Logger::instance().log("Program finished succesfully.");
-};
+}
 
 void ArgParser::handlePredict() {
   std::string filePath, destinationPath, weightsPath;
@@ -100,7 +100,7 @@ void ArgParser::handlePredict() {
   saveToCSVFile(predictions, destinationPath);
   Logger::instance().log("Success");
   Logger::instance().log("Program finished succesfully.");
-};
+}
 
 void ArgParser::handleEvaluate() {
   std::string filePath, destinationPath;
@@ -138,7 +138,7 @@ void ArgParser::handleEvaluate() {
                         "F1 score: " + std::to_string(f1Score_v);
   Logger::instance().log(metrics);
   Logger::instance().log("Program finished succesfully.");
-};
+}
 
 void ArgParser::collectTrainData(std::string& filePath,
                                  std::string& destinationPath, bool& hasHeader,
@@ -178,7 +178,7 @@ void ArgParser::collectTrainData(std::string& filePath,
   std::cin >> alpha;
   std::cout << "Enter the number of epochs\n";
   std::cin >> epochs;
-};
+}
 
 void ArgParser::collectPredictData(std::string& filePath,
                                    std::string& destinationPath,
@@ -210,7 +210,7 @@ void ArgParser::collectPredictData(std::string& filePath,
   while (iss >> index) {
     dropColumns.push_back(index);
   }
-};
+}
 
 void ArgParser::saveToCSVFile(std::vector<double>& predictions,
                               std::string destinationPath) {
@@ -225,4 +225,4 @@ void ArgParser::saveToCSVFile(std::vector<double>& predictions,
     outputFile << std::endl;
   }
   outputFile.close();
-};
+}
