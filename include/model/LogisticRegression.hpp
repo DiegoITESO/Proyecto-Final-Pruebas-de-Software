@@ -13,16 +13,16 @@
 #include "../utils/json.hpp"
 
 class LogisticRegression {
-  friend struct LogisticRegressionTester;
  public:
+  friend struct LogisticRegressionTester;
   LogisticRegression(size_t n_features);
   double predict(const Vector& x) const;
   void train(const ProcessedData& data, double alpha, int epochs);
   double accuracy(const ProcessedData& test) const;
-  double precision(const ProcessedData& test)
-      const;  // Of all customers I said will churn, how many really did?
-  double recall(const ProcessedData& test)
-      const;  // Of all churners, how many did I catch?
+  // Of all customers I said will churn, how many really did?
+  double precision(const ProcessedData& test) const;
+  // Of all churners, how many did I catch?
+  double recall(const ProcessedData& test) const;
   double f1Score(const ProcessedData& test) const;
   void save(const std::string& filename) const;
   void load(const std::string& filename);
@@ -32,8 +32,8 @@ class LogisticRegression {
   double bias;
   double loss;
   double sigmoid(const double z) const;
-  double computeLoss(const double y_true, const double y_pred)
-      const;  // Calculates Loss using cross enthropy loss function
+  // Calculates Loss using cross enthropy loss function
+  double computeLoss(const double y_true, const double y_pred) const;
   void updateWeights(const ProcessedData& data, const double& alpha);
 };
 
