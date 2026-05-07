@@ -1,2 +1,3 @@
-# Third-party single-header library; formatting is upstream. CI skips it (see Style Enforcement workflow).
+# Vendored single-header libraries; format upstream. CI also skips these (see Style Enforcement workflow).
 include/utils/json.hpp
+tests/catch.hpp
