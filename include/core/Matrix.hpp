@@ -9,7 +9,7 @@
 class Matrix {
  public:
   Matrix() = default;
-  Matrix(std::vector<Vector> rows);
+  explicit Matrix(std::vector<Vector> rows);
   Matrix(std::initializer_list<Vector> rows);
   explicit Matrix(size_t rows, size_t cols);
   Matrix transpose() const;

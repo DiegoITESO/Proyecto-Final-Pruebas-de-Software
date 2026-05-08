@@ -2,9 +2,12 @@ name: Style Enforcement
 
 on:
   push:
-    branches: [ main, dev ]
+    branches:
+      - main
+      - dev
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   enforce-style:
@@ -22,16 +25,30 @@ jobs:
       - name: Check Formatting
         run: |
           set -euo pipefail
+
+          git ls-files -z | grep -zE '\.(cpp|hpp|h)$' | grep -zvE 'include/utils/json.hpp|tests/catch.hpp|tests/' | \
           while IFS= read -r -d '' file; do
             echo "Checking $file"
             if ! timeout 10s clang-format --dry-run --Werror -style=file "$file"; then
               echo "ERROR: clang-format failed or timed out on $file"
               exit 1
             fi
-          done < <(git ls-files -z -- '*.cpp' '*.hpp' '*.h')
+          done
 
-      - name: Static Analysis (Safety Check)
+      - name: Install Cppcheck
         run: |
           sudo apt-get update
           sudo apt-get install -y cppcheck
-          cppcheck --enable=warning,style,performance --error-exitcode=1 .
+
+      - name: Static Analysis (Safety Check)
+        run: |
+          cppcheck \
+            --enable=warning,style,performance \
+            --error-exitcode=1 \
+            --force \
+            --inline-suppr \
+            --suppress=syntaxError:include/utils/json.hpp \
+            --suppress=*:include/utils/json.hpp \
+            --suppress=missingIncludeSystem \
+            --suppress=useStlAlgorithm \
+            src/

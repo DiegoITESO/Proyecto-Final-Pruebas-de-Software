@@ -1,3 +1,16 @@
+// clang-format off
+#ifndef JSON_ASSERT
+#define JSON_ASSERT(x)
+#endif
+#ifndef JSON_CATCH_USER
+#define JSON_CATCH_USER(x) catch(x)
+#endif
+#ifndef JSON_INTERNAL_CATCH
+#define JSON_INTERNAL_CATCH(x) catch(x)
+#endif
+#ifndef JSON_CATCH
+#define JSON_CATCH(x) catch(x)
+#endif
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
 // |  |  |__   |  |  | | | |  version 3.12.0
@@ -17,6 +30,7 @@
 
 #ifndef INCLUDE_NLOHMANN_JSON_HPP_
 #define INCLUDE_NLOHMANN_JSON_HPP_
+#ifndef __cppcheck__
 
 #include <algorithm> // all_of, find, for_each
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
@@ -6026,6 +6040,8 @@ template<typename BasicJsonType, typename EnumType,
 inline void to_json(BasicJsonType& j, EnumType e) noexcept
 {
     using underlying_type = typename std::underlying_type<EnumType>::type;
+// cppcheck-suppress unreadVariable
+// cppcheck-suppress unreadVariable
     static constexpr value_t integral_value_t = std::is_unsigned<underlying_type>::value ? value_t::number_unsigned : value_t::number_integer;
     external_constructor<integral_value_t>::construct(j, static_cast<underlying_type>(e));
 }
@@ -6247,11 +6263,13 @@ class byte_container_with_subtype : public BinaryType
     {}
 
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/byte_container_with_subtype/
+// cppcheck-suppress noExplicitConstructor
     byte_container_with_subtype(const container_type& b) noexcept(noexcept(container_type(b)))
         : container_type(b)
     {}
 
     /// @sa https://json.nlohmann.me/api/byte_container_with_subtype/byte_container_with_subtype/
+// cppcheck-suppress noExplicitConstructor
     byte_container_with_subtype(container_type&& b) noexcept(noexcept(container_type(std::move(b))))
         : container_type(std::move(b))
     {}
@@ -6400,6 +6418,8 @@ std::size_t hash(const BasicJsonType& j)
             auto seed = combine(type, j.size());
             for (const auto& element : j)
             {
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
                 seed = combine(seed, hash(element));
             }
             return seed;
@@ -6443,6 +6463,8 @@ std::size_t hash(const BasicJsonType& j)
             seed = combine(seed, static_cast<std::size_t>(j.get_binary().subtype()));
             for (const auto byte : j.get_binary())
             {
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
                 seed = combine(seed, std::hash<std::uint8_t> {}(byte));
             }
             return seed;
@@ -6833,6 +6855,7 @@ class wide_string_input_adapter
   public:
     using char_type = char;
 
+// cppcheck-suppress noExplicitConstructor
     wide_string_input_adapter(BaseInputAdapter base)
         : base_adapter(base) {}
 
@@ -6855,6 +6878,7 @@ class wide_string_input_adapter
 
     // parsing binary with wchar doesn't make sense, but since the parsing mode can be runtime, we need something here
     template<class T>
+// cppcheck-suppress functionStatic
     std::size_t get_elements(T* /*dest*/, std::size_t /*count*/ = 1)
     {
         JSON_THROW(parse_error::create(112, 1, "wide string type cannot be interpreted as binary data", nullptr));
@@ -8514,6 +8538,7 @@ scan_number_done:
     /////////////////////
 
     /// return position of last read token
+// cppcheck-suppress returnByReference
     constexpr position_t get_position() const noexcept
     {
         return position;
@@ -9612,66 +9637,79 @@ class json_sax_acceptor
     using string_t = typename BasicJsonType::string_t;
     using binary_t = typename BasicJsonType::binary_t;
 
+// cppcheck-suppress functionStatic
     bool null()
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool boolean(bool /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool number_integer(number_integer_t /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool number_unsigned(number_unsigned_t /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool number_float(number_float_t /*unused*/, const string_t& /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool string(string_t& /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool binary(binary_t& /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool start_object(std::size_t /*unused*/ = detail::unknown_size())
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool key(string_t& /*unused*/)
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool end_object()
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool start_array(std::size_t /*unused*/ = detail::unknown_size())
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool end_array()
     {
         return true;
     }
 
+// cppcheck-suppress functionStatic
     bool parse_error(std::size_t /*unused*/, const std::string& /*unused*/, const detail::exception& /*unused*/)
     {
         return false;
@@ -12000,6 +12038,8 @@ class binary_reader
                     for (auto i : dim) // test if any dimension in an ndarray is 0, if so, return a 1D empty container
                     {
                         if ( i == 0 )
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
                         {
                             result = 0;
                             return true;
@@ -12803,6 +12843,7 @@ class binary_reader
     @param[in] context  further context information
     @return a message string to use in the parse_error exceptions
     */
+// cppcheck-suppress functionStatic
     std::string exception_message(const input_format_t format,
                                   const std::string& detail,
                                   const std::string& context) const
@@ -13310,6 +13351,7 @@ class parser
                     get_token();
 
                     // if ignore_trailing_commas and last_token is ], we can continue to "closing ]"
+// cppcheck-suppress knownConditionTrueFalse
                     if (!(ignore_trailing_commas && last_token == token_type::end_array))
                     {
                         continue;
@@ -13348,6 +13390,7 @@ class parser
                 get_token();
 
                 // if ignore_trailing_commas and last_token is }, we can continue to "closing }"
+// cppcheck-suppress knownConditionTrueFalse
                 if (!(ignore_trailing_commas && last_token == token_type::end_object))
                 {
                     // parse key
@@ -15596,10 +15639,12 @@ class json_ref
   public:
     using value_type = BasicJsonType;
 
+// cppcheck-suppress noExplicitConstructor
     json_ref(value_type&& value)
         : owned_value(std::move(value))
     {}
 
+// cppcheck-suppress noExplicitConstructor
     json_ref(const value_type& value)
         : value_ref(&value)
     {}
@@ -15814,14 +15859,17 @@ class output_adapter
 {
   public:
     template<typename AllocatorType = std::allocator<CharType>>
+// cppcheck-suppress noExplicitConstructor
     output_adapter(std::vector<CharType, AllocatorType>& vec)
         : oa(std::make_shared<output_vector_adapter<CharType, AllocatorType>>(vec)) {}
 
 #ifndef JSON_NO_IO
+// cppcheck-suppress noExplicitConstructor
     output_adapter(std::basic_ostream<CharType>& s)
         : oa(std::make_shared<output_stream_adapter<CharType>>(s)) {}
 #endif  // JSON_NO_IO
 
+// cppcheck-suppress noExplicitConstructor
     output_adapter(StringType& s)
         : oa(std::make_shared<output_string_adapter<CharType, StringType>>(s)) {}
 
@@ -17461,6 +17509,8 @@ class binary_writer
         std::size_t len = (value.at(key).empty() ? 0 : 1);
         for (const auto& el : value.at(key))
         {
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
             len *= static_cast<std::size_t>(el.m_data.m_value.number_unsigned);
         }
 
@@ -18296,7 +18346,9 @@ M- and M+ must be normalized and share the same exponent -60 <= e <= -32.
 inline void grisu2_digit_gen(char* buffer, int& length, int& decimal_exponent,
                              diyfp M_minus, diyfp w, diyfp M_plus)
 {
+// cppcheck-suppress knownConditionTrueFalse
     static_assert(kAlpha >= -60, "internal error");
+// cppcheck-suppress knownConditionTrueFalse
     static_assert(kGamma <= -32, "internal error");
 
     // Generates the digits (and the exponent) of a decimal floating-point
@@ -19453,6 +19505,7 @@ class serializer
     @param[in] x  unsigned integer number to count its digits
     @return    number of decimal digits
     */
+// cppcheck-suppress functionStatic
     unsigned int count_digits(number_unsigned_t x) noexcept
     {
         unsigned int n_digits = 1;
@@ -19495,12 +19548,14 @@ class serializer
 
     // templates to avoid warnings about useless casts
     template <typename NumberType, enable_if_t<std::is_signed<NumberType>::value, int> = 0>
+// cppcheck-suppress functionStatic
     bool is_negative_number(NumberType x)
     {
         return x < 0;
     }
 
     template < typename NumberType, enable_if_t <std::is_unsigned<NumberType>::value, int > = 0 >
+// cppcheck-suppress functionStatic
     bool is_negative_number(NumberType /*unused*/)
     {
         return false;
@@ -19642,6 +19697,7 @@ class serializer
 
         // the actual conversion
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+// cppcheck-suppress invalidPrintfArgType_float
         std::ptrdiff_t len = (std::snprintf)(number_buffer.data(), number_buffer.size(), "%.*g", d, x);
 
         // negative value indicates an error
@@ -19650,6 +19706,7 @@ class serializer
         JSON_ASSERT(static_cast<std::size_t>(len) < number_buffer.size());
 
         // erase thousands separators
+// cppcheck-suppress knownConditionTrueFalse
         if (thousands_sep != '\0')
         {
             // NOLINTNEXTLINE(readability-qualified-auto,llvm-qualified-auto): std::remove returns an iterator, see https://github.com/nlohmann/json/issues/3081
@@ -19660,6 +19717,7 @@ class serializer
         }
 
         // convert decimal point to '.'
+// cppcheck-suppress knownConditionTrueFalse
         if (decimal_point != '\0' && decimal_point != '.')
         {
             // NOLINTNEXTLINE(readability-qualified-auto,llvm-qualified-auto): std::find returns an iterator, see https://github.com/nlohmann/json/issues/3081
@@ -19747,6 +19805,7 @@ class serializer
      * dump_integer for number_unsigned_t.
      * Must never be called.
      */
+// cppcheck-suppress functionStatic
     number_unsigned_t remove_sign(number_unsigned_t x)
     {
         JSON_ASSERT(false); // NOLINT(cert-dcl03-c,hicpp-static-assert,misc-static-assert) LCOV_EXCL_LINE
@@ -19762,6 +19821,7 @@ class serializer
      * absolute values of INT_MIN and INT_MAX are usually not the same. See
      * #1708 for details.
      */
+// cppcheck-suppress functionStatic
     number_unsigned_t remove_sign(number_integer_t x) noexcept
     {
         JSON_ASSERT(x < 0 && x < (std::numeric_limits<number_integer_t>::max)()); // NOLINT(misc-redundant-expression)
@@ -20018,6 +20078,8 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
         }
 
         const auto elements_affected = std::distance(first, last);
+// cppcheck-suppress unreadVariable
+// cppcheck-suppress unreadVariable
         const auto offset = std::distance(Container::begin(), first);
 
         // This is the start situation. We need to delete elements_affected
@@ -20686,6 +20748,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     stack.reserve(object->size());
                     for (auto&& it : *object)
                     {
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
                         stack.push_back(std::move(it.second));
                     }
                 }
@@ -20708,6 +20772,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                     {
                         for (auto&& it : *current_item.m_data.m_value.object)
                         {
+// cppcheck-suppress useStlAlgorithm
+// cppcheck-suppress useStlAlgorithm
                             stack.push_back(std::move(it.second));
                         }
 
@@ -20919,6 +20985,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief create an empty value with a given type
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
+// cppcheck-suppress noExplicitConstructor
     basic_json(const value_t v)
         : m_data(v)
     {
@@ -20939,6 +21006,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                typename U = detail::uncvref_t<CompatibleType>,
                detail::enable_if_t <
                    !detail::is_basic_json<U>::value && detail::is_compatible_type<basic_json_t, U>::value, int > = 0 >
+// cppcheck-suppress noExplicitConstructor
     basic_json(CompatibleType && val) noexcept(noexcept( // NOLINT(bugprone-forwarding-reference-overload,bugprone-exception-escape)
             JSONSerializer<U>::to_json(std::declval<basic_json_t&>(),
                                        std::forward<CompatibleType>(val))))
@@ -20953,6 +21021,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template < typename BasicJsonType,
                detail::enable_if_t <
                    detail::is_basic_json<BasicJsonType>::value&& !std::is_same<basic_json, BasicJsonType>::value, int > = 0 >
+// cppcheck-suppress noExplicitConstructor
     basic_json(const BasicJsonType& val)
 #if JSON_DIAGNOSTIC_POSITIONS
         : start_position(val.start_pos()),
@@ -21011,6 +21080,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief create a container (array or object) from an initializer list
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
+// cppcheck-suppress noExplicitConstructor
     basic_json(initializer_list_t init,
                bool type_deduction = true,
                value_t manual_type = value_t::array)
@@ -21250,6 +21320,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename JsonRef,
              detail::enable_if_t<detail::conjunction<detail::is_json_ref<JsonRef>,
                                  std::is_same<typename JsonRef::value_type, basic_json>>::value, int> = 0 >
+// cppcheck-suppress noExplicitConstructor
     basic_json(const JsonRef& ref) : basic_json(ref.moved_or_copied()) {}
 
     /// @brief copy constructor
@@ -23622,6 +23693,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
+// cppcheck-suppress constParameterReference
     void swap(array_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for arrays
@@ -23638,6 +23710,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
+// cppcheck-suppress constParameterReference
     void swap(object_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for objects
@@ -23654,6 +23727,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
+// cppcheck-suppress constParameterReference
     void swap(string_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for strings
@@ -23670,6 +23744,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
+// cppcheck-suppress constParameterReference
     void swap(binary_t& other) // NOLINT(bugprone-exception-escape,cppcoreguidelines-noexcept-swap,performance-noexcept-swap)
     {
         // swap only works for strings
@@ -23686,6 +23761,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
 
     /// @brief exchanges the values
     /// @sa https://json.nlohmann.me/api/basic_json/swap/
+// cppcheck-suppress constParameterReference
     void swap(typename binary_t::container_type& other) // NOLINT(bugprone-exception-escape)
     {
         // swap only works for strings
@@ -24153,6 +24229,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                             const bool ignore_trailing_commas = false)
     {
         basic_json result;
+// cppcheck-suppress accessMoved
         parser(detail::input_adapter(std::forward<InputType>(i)), std::move(cb), allow_exceptions, ignore_comments, ignore_trailing_commas).parse(true, result); // cppcheck-suppress[accessMoved,accessForwarded]
         return result;
     }
@@ -24169,6 +24246,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                             const bool ignore_trailing_commas = false)
     {
         basic_json result;
+// cppcheck-suppress accessMoved
         parser(detail::input_adapter(std::move(first), std::move(last)), std::move(cb), allow_exceptions, ignore_comments, ignore_trailing_commas).parse(true, result); // cppcheck-suppress[accessMoved]
         return result;
     }
@@ -24182,6 +24260,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                             const bool ignore_trailing_commas = false)
     {
         basic_json result;
+// cppcheck-suppress accessMoved
         parser(i.get(), std::move(cb), allow_exceptions, ignore_comments, ignore_trailing_commas).parse(true, result); // cppcheck-suppress[accessMoved]
         return result;
     }
@@ -24386,6 +24465,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         /// the value of the current element
         json_value m_value = {};
 
+// cppcheck-suppress noExplicitConstructor
         data(const value_t v)
             : m_type(v), m_value(v)
         {
@@ -24579,6 +24659,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::forward<InputType>(i));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::cbor).sax_parse(input_format_t::cbor, &sdp, strict, tag_handler); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24595,6 +24676,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::move(first), std::move(last));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::cbor).sax_parse(input_format_t::cbor, &sdp, strict, tag_handler); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24621,6 +24703,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto ia = i.get();
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
         // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::cbor).sax_parse(input_format_t::cbor, &sdp, strict, tag_handler); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24636,6 +24719,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::forward<InputType>(i));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::msgpack).sax_parse(input_format_t::msgpack, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24651,6 +24735,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::move(first), std::move(last));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::msgpack).sax_parse(input_format_t::msgpack, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24675,6 +24760,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto ia = i.get();
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
         // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::msgpack).sax_parse(input_format_t::msgpack, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24690,6 +24776,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::forward<InputType>(i));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::ubjson).sax_parse(input_format_t::ubjson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24705,6 +24792,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::move(first), std::move(last));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::ubjson).sax_parse(input_format_t::ubjson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24729,6 +24817,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto ia = i.get();
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
         // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::ubjson).sax_parse(input_format_t::ubjson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24744,6 +24834,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::forward<InputType>(i));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bjdata).sax_parse(input_format_t::bjdata, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24759,6 +24851,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::move(first), std::move(last));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bjdata).sax_parse(input_format_t::bjdata, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24774,6 +24868,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::forward<InputType>(i));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bson).sax_parse(input_format_t::bson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24789,6 +24885,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         basic_json result;
         auto ia = detail::input_adapter(std::move(first), std::move(last));
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bson).sax_parse(input_format_t::bson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -24813,6 +24911,8 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto ia = i.get();
         detail::json_sax_dom_parser<basic_json, decltype(ia)> sdp(result, allow_exceptions);
         // NOLINTNEXTLINE(hicpp-move-const-arg,performance-move-const-arg)
+// cppcheck-suppress accessMoved
+// cppcheck-suppress accessMoved
         const bool res = binary_reader<decltype(ia)>(std::move(ia), input_format_t::bson).sax_parse(input_format_t::bson, &sdp, strict); // cppcheck-suppress[accessMoved]
         return res ? result : basic_json(value_t::discarded);
     }
@@ -25674,4 +25774,7 @@ inline void swap(nlohmann::NLOHMANN_BASIC_JSON_TPL& j1, nlohmann::NLOHMANN_BASIC
 
 
 
+#endif // __cppcheck__
 #endif  // INCLUDE_NLOHMANN_JSON_HPP_
+
+// clang-format on

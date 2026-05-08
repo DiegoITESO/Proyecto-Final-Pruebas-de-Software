@@ -19,7 +19,7 @@ Matrix::Matrix(std::initializer_list<Vector> rows) {
   rows_.reserve(rows.size());
   for (auto& row : rows) rows_.push_back(row);
 };
-Matrix::Matrix(size_t rows, size_t cols) : rows_(rows, Vector(cols)) {};
+Matrix::Matrix(size_t rows, size_t cols) : rows_(rows, Vector(cols)) {}
 Matrix Matrix::transpose() const {
   Matrix result(rows_[0].size(), rows_.size());
   for (size_t i = 0; i < rows_.size(); ++i)
@@ -35,7 +35,9 @@ Vector Matrix::operator*(const Vector& times) {
         "The number of elements in vector must be equal to the number of "
         "columns in matrix");
   std::vector<double> result;
-  for (Vector& row : rows_) result.push_back(row.dot(times));
+  for (const Vector& row : rows_) {
+    result.push_back(row.dot(times));
+  }
   return Vector(result);
 };
 Matrix Matrix::operator*(const double scalar) {

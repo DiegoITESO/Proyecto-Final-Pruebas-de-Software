@@ -14,8 +14,9 @@
 
 class LogisticRegression {
   friend struct LogisticRegressionTester;
+
  public:
-  LogisticRegression(size_t n_features);
+  explicit LogisticRegression(size_t n_features);
   double predict(const Vector& x) const;
   void train(const ProcessedData& data, double alpha, int epochs);
   double accuracy(const ProcessedData& test) const;
@@ -31,9 +32,11 @@ class LogisticRegression {
   Vector weights;
   double bias;
   double loss;
-  double sigmoid(const double z) const;
-  double computeLoss(const double y_true, const double y_pred)
-      const;  // Calculates Loss using cross enthropy loss function
+  static double sigmoid(const double z);
+  static double computeLoss(
+      const double y_true,
+      const double
+          y_pred);  // Calculates Loss using cross enthropy loss function
   void updateWeights(const ProcessedData& data, const double& alpha);
 };
 
