@@ -1,3 +1,7 @@
+/**
+ * @file LogisticRegression.cpp
+ * @brief Implementation of the LogisticRegression class.
+ */
 #include "../../include/model/LogisticRegression.hpp"
 
 LogisticRegression::LogisticRegression(size_t n_features) {

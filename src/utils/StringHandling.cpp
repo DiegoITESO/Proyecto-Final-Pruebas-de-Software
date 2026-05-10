@@ -1,3 +1,7 @@
+/**
+ * @file StringHandling.cpp
+ * @brief Implementation of utility string manipulation functions.
+ */
 #include "../../include/utils/StringHandling.hpp"
 bool StringHandling::isNumber(const std::string& s) {
   std::istringstream iss(s);

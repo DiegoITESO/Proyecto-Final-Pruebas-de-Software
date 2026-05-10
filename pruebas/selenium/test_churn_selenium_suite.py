@@ -1,3 +1,9 @@
+"""
+Selenium test suite for Customer Churn Predictor UI fixtures.
+
+This module validates HTML fixtures aligned with the README and ArgParser output
+of the C++ project, ensuring the UI accurately reflects the CLI functionality.
+"""
 # Suite Selenium: valida fixtures HTML alineadas al README y ArgParser del proyecto C++.
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC

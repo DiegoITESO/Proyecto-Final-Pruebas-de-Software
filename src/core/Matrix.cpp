@@ -1,3 +1,7 @@
+/**
+ * @file Matrix.cpp
+ * @brief Implementation of the Matrix class representing a 2D matrix.
+ */
 #include "../../include/core/Matrix.hpp"
 
 //----------Matrix methods----------//
