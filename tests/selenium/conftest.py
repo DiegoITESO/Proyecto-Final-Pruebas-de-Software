@@ -1,10 +1,26 @@
-# Configuracion compartida: ruta a fixtures y driver Chrome headless.
+"""Shared pytest fixtures for Selenium + BDD HTML fixture tests."""
+
+from __future__ import annotations
+
+import os
 from pathlib import Path
 
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+
+pytest_plugins = ["bdd_steps"]
+
+
+def _chrome_options() -> webdriver.ChromeOptions:
+    opts = webdriver.ChromeOptions()
+    opts.add_argument("--headless=new")
+    opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1280,900")
+    if bin_path := os.environ.get("CHROMIUM_BIN"):
+        opts.binary_location = bin_path
+    return opts
 
 
 @pytest.fixture(scope="session")
@@ -18,13 +34,9 @@ def file_uri(path: Path) -> str:
 
 @pytest.fixture(scope="session")
 def driver():
-    # Un solo navegador por sesion: cada prueba abre su fixture con open_fixture.
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--headless=new")
-    opts.add_argument("--disable-gpu")
-    opts.add_argument("--window-size=1280,900")
+    """One browser per session; each scenario opens its own fixture via ``open_fixture``."""
     service = ChromeService(ChromeDriverManager().install())
-    drv = webdriver.Chrome(service=service, options=opts)
+    drv = webdriver.Chrome(service=service, options=_chrome_options())
     yield drv
     drv.quit()
 

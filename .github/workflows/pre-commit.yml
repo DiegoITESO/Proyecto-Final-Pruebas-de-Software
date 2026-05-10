@@ -52,3 +52,40 @@ jobs:
             --suppress=missingIncludeSystem \
             --suppress=useStlAlgorithm \
             src/
+
+  python-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python test tooling
+        run: pip install -r tests/requirements.txt
+
+      - name: Ruff lint
+        run: ruff check tests/selenium tests/integration
+
+      - name: Ruff format
+        run: ruff format --check tests/selenium tests/integration
+
+      - name: Install build toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make g++
+
+      - name: Build C++ binary
+        run: make
+
+      - name: Integration tests (unittest via pytest)
+        run: pytest tests/integration -v --tb=short
+
+      - name: Set up Chrome for Selenium
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Selenium BDD tests
+        run: pytest tests/selenium -v --tb=short

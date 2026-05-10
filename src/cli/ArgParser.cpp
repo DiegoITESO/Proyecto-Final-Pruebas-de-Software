@@ -83,7 +83,7 @@ void ArgParser::handlePredict() {
   std::string filePath, destinationPath, weightsPath;
   bool hasHeader;
   std::vector<size_t> dropColumns;
-  collectPredictData(filePath, destinationPath, weightsPath, hasHeader,
+  collectPredictData(filePath, weightsPath, destinationPath, hasHeader,
                      dropColumns);
   Logger::instance().log("Trying to parse CSV...");
   std::vector<std::vector<std::string>> csv = CSVReader::readCSV(filePath);
