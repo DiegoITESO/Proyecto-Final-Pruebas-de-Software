@@ -1,6 +1,7 @@
 /**
  * @file CSVReader.cpp
- * @brief Implementation of CSVReader utilities for parsing and preprocessing data.
+ * @brief Implementation of CSVReader utilities for parsing and preprocessing
+ * data.
  */
 #include "../../include/utils/CSVReader.hpp"
 //----------Util CSVReader functions----------//

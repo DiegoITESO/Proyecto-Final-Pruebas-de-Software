@@ -17,7 +17,8 @@ TEST_CASE("UNA SOLA INSTANCIA (SINGLETON)", "[logger]") {
 }
 
 /**
- * @brief Verifies that setting a log file actually creates the file on the filesystem.
+ * @brief Verifies that setting a log file actually creates the file on the
+ * filesystem.
  */
 TEST_CASE("CREAR ARCHIVO DE LOGGING", "[logger]") {
   Logger::instance().reset();
@@ -29,7 +30,8 @@ TEST_CASE("CREAR ARCHIVO DE LOGGING", "[logger]") {
 }
 
 /**
- * @brief Verifies that messages are properly written and appended to the target log file.
+ * @brief Verifies that messages are properly written and appended to the
+ * target log file.
  */
 TEST_CASE("ESCRIBIR MENSAJE EN EL ARCHIVO", "[logger]") {
   Logger::instance().reset();
@@ -46,7 +48,8 @@ TEST_CASE("ESCRIBIR MENSAJE EN EL ARCHIVO", "[logger]") {
 }
 
 /**
- * @brief Verifies that if no file is set, the logger falls back to writing to std::cerr.
+ * @brief Verifies that if no file is set, the logger falls back to writing to
+ * std::cerr.
  */
 TEST_CASE("IMPRIMIR A STD::CERR COMO FALLBACK", "[logger]") {
   Logger::instance().reset();

@@ -44,7 +44,8 @@ ProcessedData preprocess(const std::vector<std::vector<std::string>>& data,
                          std::vector<size_t> dropColumns);
 
 /**
- * @brief Normalizes the features in the ProcessedData structure (Z-score normalization).
+ * @brief Normalizes the features in the ProcessedData structure (Z-score
+ * normalization).
  * @param data The ProcessedData containing the features to normalize.
  */
 void normalizeFeatures(ProcessedData& data);

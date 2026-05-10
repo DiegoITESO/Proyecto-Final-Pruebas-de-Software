@@ -18,7 +18,8 @@ struct Splitter {
   /**
    * @brief Splits the provided data according to the given ratio.
    * @param data The processed data to split.
-   * @param ratio The ratio of the data to keep for training (e.g., 0.8 for 80%).
+   * @param ratio The ratio of the data to keep for training (e.g., 0.8 for
+   * 80%).
    * @return A pair containing the training data and testing data respectively.
    */
   virtual std::pair<ProcessedData, ProcessedData> split(

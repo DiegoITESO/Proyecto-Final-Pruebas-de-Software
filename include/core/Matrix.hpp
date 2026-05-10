@@ -32,7 +32,8 @@ class Matrix {
   Matrix(std::initializer_list<Vector> rows);
 
   /**
-   * @brief Constructs a matrix with specified rows and columns initialized to 0.
+   * @brief Constructs a matrix with specified rows and columns initialized to
+   * 0.
    * @param rows Number of rows.
    * @param cols Number of columns.
    */

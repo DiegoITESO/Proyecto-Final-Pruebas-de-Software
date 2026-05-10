@@ -27,7 +27,8 @@ class LogisticRegression {
   explicit LogisticRegression(size_t n_features);
 
   /**
-   * @brief Predicts the probability of the positive class (churn) for a single input vector.
+   * @brief Predicts the probability of the positive class (churn) for a single
+   * input vector.
    * @param x The input feature vector.
    * @return The predicted probability [0.0, 1.0].
    */
@@ -72,7 +73,8 @@ class LogisticRegression {
   double f1Score(const ProcessedData& test) const;
 
   /**
-   * @brief Saves the trained model parameters (weights and bias) to a JSON file.
+   * @brief Saves the trained model parameters (weights and bias) to a JSON
+   * file.
    * @param filename The output JSON file path.
    */
   void save(const std::string& filename) const;

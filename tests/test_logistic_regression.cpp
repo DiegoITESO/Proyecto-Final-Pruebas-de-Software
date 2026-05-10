@@ -22,7 +22,8 @@ struct LogisticRegressionTester {
 };
 
 /**
- * @brief Verifies that the sigmoid activation function correctly squashes outputs 
+ * @brief Verifies that the sigmoid activation function correctly squashes
+ * outputs
  * to the range [0, 1] for typical boundaries.
  */
 TEST_CASE("SIGMOID PRODUCES VALUES BETWEEN 0 AND 1", "[model]") {
@@ -36,7 +37,8 @@ TEST_CASE("SIGMOID PRODUCES VALUES BETWEEN 0 AND 1", "[model]") {
 }
 
 /**
- * @brief Validates the forward pass (prediction phase) by manually injecting weights 
+ * @brief Validates the forward pass (prediction phase) by manually injecting
+ * weights
  * and testing if the calculated probability matches mathematical expectations.
  */
 TEST_CASE("PREDICT RETURNS EXPECTED PROBABILITY", "[model]") {
@@ -50,7 +52,8 @@ TEST_CASE("PREDICT RETURNS EXPECTED PROBABILITY", "[model]") {
 }
 
 /**
- * @brief Ensures the stochastic gradient descent logic updates the internal weights 
+ * @brief Ensures the stochastic gradient descent logic updates the internal
+ * weights
  * towards the direction that reduces error.
  */
 TEST_CASE("UPDATEWEIGHTS ADJUSTS WEIGHTS IN THE RIGHT DIRECTION", "[model]") {
@@ -70,7 +73,8 @@ TEST_CASE("UPDATEWEIGHTS ADJUSTS WEIGHTS IN THE RIGHT DIRECTION", "[model]") {
 }
 
 /**
- * @brief Checks if a full training cycle on simple mock data converges successfully 
+ * @brief Checks if a full training cycle on simple mock data converges
+ * successfully
  * and is capable of correctly classifying data points.
  */
 TEST_CASE("TRAINING REDUCES LOSS AND CLASSIFIES CORRECTLY", "[model]") {
@@ -95,7 +99,8 @@ TEST_CASE("TRAINING REDUCES LOSS AND CLASSIFIES CORRECTLY", "[model]") {
 
 /**
  * @brief Validates the evaluation metrics calculation logic against a small 
- * known dataset to ensure Accuracy, Precision, Recall, and F1 formulas are correct.
+ * known dataset to ensure Accuracy, Precision, Recall, and F1 formulas are
+ * correct.
  */
 TEST_CASE("ACCURACY, PRECISION, RECALL, F1SCORE COMPUTE CORRECTLY", "[model]") {
   ProcessedData test_data;
@@ -111,7 +116,8 @@ TEST_CASE("ACCURACY, PRECISION, RECALL, F1SCORE COMPUTE CORRECTLY", "[model]") {
 }
 
 /**
- * @brief Confirms the model can successfully serialize its weights/bias to a JSON file 
+ * @brief Confirms the model can successfully serialize its weights/bias to a
+ * JSON file
  * and subsequently restore its exact state.
  */
 TEST_CASE("PERSISTENCE SAVE/LOAD CHECK", "[model]") {

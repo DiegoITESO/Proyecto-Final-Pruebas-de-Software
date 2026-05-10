@@ -27,7 +27,8 @@ class Logger {
   void set_file(const std::string& filename);
 
   /**
-   * @brief Logs a message to the currently set log file in a thread-safe manner.
+   * @brief Logs a message to the currently set log file in a thread-safe
+   * manner.
    * @param message The message to log.
    */
   void log(const std::string& message);

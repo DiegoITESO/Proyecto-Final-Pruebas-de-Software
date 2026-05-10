@@ -7,7 +7,8 @@
 #include "vector"
 
 /**
- * @brief Tests various Vector constructors (default, sized, array-based) and verifies sizes and initial values.
+ * @brief Tests various Vector constructors (default, sized, array-based) and
+ * verifies sizes and initial values.
  */
 TEST_CASE("INIIALIZAR VECTOR", "[vector]") {
   std::vector<double> array(10, 12);
@@ -27,7 +28,8 @@ TEST_CASE("INIIALIZAR VECTOR", "[vector]") {
 }
 
 /**
- * @brief Verifies that vector addition produces the mathematically correct result vector.
+ * @brief Verifies that vector addition produces the mathematically correct
+ * result vector.
  */
 TEST_CASE("SUMAR VECTORES", "[vector]") {
   Vector v1 = {1, 2, 3, 4};
@@ -37,7 +39,8 @@ TEST_CASE("SUMAR VECTORES", "[vector]") {
 }
 
 /**
- * @brief Verifies that vector subtraction produces the mathematically correct result vector.
+ * @brief Verifies that vector subtraction produces the mathematically correct
+ * result vector.
  */
 TEST_CASE("RESTAR VECTORES", "[vector]") {
   Vector v1 = {1, 2, 3, 4};
@@ -71,7 +74,8 @@ TEST_CASE("PRODUCTO POR ESCALAR", "[]") {
 }
 
 /**
- * @brief Tests the equality and inequality operators, taking into account floating-point precision.
+ * @brief Tests the equality and inequality operators, taking into account
+ * floating-point precision.
  */
 TEST_CASE("PRUEBA DE IGUALDAD", "[vector]") {
   Vector v1 = {1, 2, 3, 4};
@@ -87,7 +91,8 @@ TEST_CASE("PRUEBA DE IGUALDAD", "[vector]") {
 }
 
 /**
- * @brief Ensures that mathematical operations between vectors of mismatched sizes throw exceptions.
+ * @brief Ensures that mathematical operations between vectors of mismatched
+ * sizes throw exceptions.
  */
 TEST_CASE("OPERACIONES CON DIFERENTES TAMAÑOS", "[vector]") {
   Vector v1 = {1, 2, 3};
@@ -98,7 +103,8 @@ TEST_CASE("OPERACIONES CON DIFERENTES TAMAÑOS", "[vector]") {
 }
 
 /**
- * @brief Verifies that the magnitude (L2 Norm) calculation matches expected floating-point values.
+ * @brief Verifies that the magnitude (L2 Norm) calculation matches expected
+ * floating-point values.
  */
 TEST_CASE("NORMA DE UN VECTOR", "[vector]") {
   Vector v1 = {1, 2, 3, 4};
@@ -107,7 +113,8 @@ TEST_CASE("NORMA DE UN VECTOR", "[vector]") {
 }
 
 /**
- * @brief Tests move and copy semantics to ensure safe resource ownership and transfers.
+ * @brief Tests move and copy semantics to ensure safe resource ownership and
+ * transfers.
  */
 TEST_CASE("COPY Y MOVE", "[vector]") {
   Vector v1 = {51, 74, 22, 98};
