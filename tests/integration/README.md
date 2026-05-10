@@ -1,5 +1,7 @@
 # Integration tests
 
+These tests call the **real C++ executable** (`logistic_churn` / `logistic_churn.exe`) in a subprocess from the repo root, with scripted stdin—same as you would in a terminal.
+
 ## Requirements
 
 - Python **3.10+**

@@ -74,6 +74,12 @@ make clean
 
 This removes the executables (`logistic_churn`, `run_tests`) from the project directory.
 
+## Automated tests
+
+- **C++ unit tests (terminal):** `make test` — compiles and runs `run_tests` over `tests/*.cpp` (Catch2).
+- **C++ CLI integration (terminal):** build `logistic_churn` first, then from repo root run `pytest tests/integration -v` (Python drives the **same binary** you use manually). See `tests/integration/README.md`.
+- **BDD / acceptance on static HTML (optional tooling):** `pytest tests/selenium -v` — checks local spec pages under `tests/selenium/fixtures/` in a headless browser; it does **not** replace C++ or CLI tests. See `tests/selenium/README.md` and `tests/README.md`.
+
 ## Project Structure
 
 ```
@@ -83,6 +89,9 @@ This removes the executables (`logistic_churn`, `run_tests`) from the project di
 │   └── ...
 ├── src/              # Core logic (vector ops, model, etc.)
 │   └── ...
+├── tests/            # C++ unit tests (*.cpp) + Python integration & Selenium/BDD
+│   ├── integration/
+│   └── selenium/
 ├── data/             # Input and output data
 ├── logs/             # Execution logs
 ├── Makefile          # Build and test automation
