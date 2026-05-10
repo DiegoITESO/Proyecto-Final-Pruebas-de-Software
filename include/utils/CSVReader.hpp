@@ -29,10 +29,10 @@ std::vector<std::vector<std::string>> readCSV(const std::string& filePath);
 
 /**
  * @brief Preprocesses the raw CSV data into numeric features and labels.
- * 
+ *
  * Handles string conversions, one-hot encoding for categorical variables,
  * dropping specified columns, and separating the target label.
- * 
+ *
  * @param data The raw 2D string data.
  * @param hasHeader True if the first row is a header.
  * @param churnColumn The index of the target column (label).

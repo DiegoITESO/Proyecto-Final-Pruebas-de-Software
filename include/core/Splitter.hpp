@@ -24,7 +24,7 @@ struct Splitter {
    */
   virtual std::pair<ProcessedData, ProcessedData> split(
       const ProcessedData& data, const double ratio) = 0;
-  
+
   /**
    * @brief Virtual destructor.
    */

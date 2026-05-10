@@ -128,6 +128,6 @@ class Vector {
   const double& operator[](size_t index) const;
 
  private:
-  std::vector<double> data_; ///< Internal storage for vector elements.
+  std::vector<double> data_;  ///< Internal storage for vector elements.
 };
 #endif

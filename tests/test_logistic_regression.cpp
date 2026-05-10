@@ -98,7 +98,7 @@ TEST_CASE("TRAINING REDUCES LOSS AND CLASSIFIES CORRECTLY", "[model]") {
 }
 
 /**
- * @brief Validates the evaluation metrics calculation logic against a small 
+ * @brief Validates the evaluation metrics calculation logic against a small
  * known dataset to ensure Accuracy, Precision, Recall, and F1 formulas are
  * correct.
  */

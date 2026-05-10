@@ -86,9 +86,9 @@ class LogisticRegression {
   void load(const std::string& filename);
 
  private:
-  Vector weights; ///< The learned feature weights.
-  double bias; ///< The learned bias term.
-  double loss; ///< Current loss value during training.
+  Vector weights;  ///< The learned feature weights.
+  double bias;     ///< The learned bias term.
+  double loss;     ///< Current loss value during training.
 
   /**
    * @brief Computes the sigmoid activation function.

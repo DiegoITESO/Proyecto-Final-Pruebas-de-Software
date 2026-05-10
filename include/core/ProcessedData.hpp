@@ -10,8 +10,9 @@
  * @brief Holds preprocessed data ready for model training or prediction.
  */
 struct ProcessedData {
-  Matrix features; ///< Matrix containing the feature vectors.
-  std::vector<std::string> headers; ///< List of feature names (headers).
-  Vector churnResults; ///< Vector containing the target labels (e.g., churn: 1 or 0).
+  Matrix features;                   ///< Matrix containing the feature vectors.
+  std::vector<std::string> headers;  ///< List of feature names (headers).
+  Vector churnResults;  ///< Vector containing the target labels (e.g., churn: 1
+                        ///< or 0).
 };
 #endif

@@ -17,7 +17,7 @@
  * @class ArgParser
  * @brief Handles parsing of command-line arguments and orchestrates the
  * execution mode.
- * 
+ *
  * The ArgParser class interprets the user's input arguments and delegates
  * control
  * to the appropriate handler functions for training, evaluating, or predicting.
@@ -37,7 +37,7 @@ class ArgParser {
   void run();
 
  private:
-  std::vector<std::string> args; ///< Stores the command-line arguments.
+  std::vector<std::string> args;  ///< Stores the command-line arguments.
 
   /**
    * @brief Displays the help message to the standard output.

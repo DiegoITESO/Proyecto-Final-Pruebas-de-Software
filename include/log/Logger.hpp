@@ -39,8 +39,8 @@ class Logger {
   void reset();
 
  private:
-  std::ofstream file_; ///< The output file stream.
-  std::mutex mutex_; ///< Mutex for thread-safe logging.
+  std::ofstream file_;  ///< The output file stream.
+  std::mutex mutex_;    ///< Mutex for thread-safe logging.
 
   /**
    * @brief Private constructor to enforce Singleton pattern.

@@ -91,6 +91,6 @@ class Matrix {
   const Vector& operator[](size_t index) const;
 
  private:
-  std::vector<Vector> rows_; ///< Stores the rows of the matrix.
+  std::vector<Vector> rows_;  ///< Stores the rows of the matrix.
 };
 #endif
