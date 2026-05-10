@@ -1,3 +1,7 @@
+/**
+ * @file test_logistic_regression.cpp
+ * @brief Unit tests for the LogisticRegression model using Catch2.
+ */
 #include "../include/core/Matrix.hpp"
 #include "../include/core/ProcessedData.hpp"
 #include "../include/core/Vector.hpp"
@@ -17,6 +21,10 @@ struct LogisticRegressionTester {
   }
 };
 
+/**
+ * @brief Verifies that the sigmoid activation function correctly squashes outputs 
+ * to the range [0, 1] for typical boundaries.
+ */
 TEST_CASE("SIGMOID PRODUCES VALUES BETWEEN 0 AND 1", "[model]") {
   LogisticRegression model(1);
   REQUIRE(LogisticRegressionTester::sigmoid(model, 0.0) ==
@@ -27,6 +35,10 @@ TEST_CASE("SIGMOID PRODUCES VALUES BETWEEN 0 AND 1", "[model]") {
           Approx(0.0).margin(1e-5));
 }
 
+/**
+ * @brief Validates the forward pass (prediction phase) by manually injecting weights 
+ * and testing if the calculated probability matches mathematical expectations.
+ */
 TEST_CASE("PREDICT RETURNS EXPECTED PROBABILITY", "[model]") {
   LogisticRegression model(2);
   LogisticRegressionTester::weights(model) = Vector{1.0, -1.0};
@@ -37,6 +49,10 @@ TEST_CASE("PREDICT RETURNS EXPECTED PROBABILITY", "[model]") {
   REQUIRE(y_pred == Approx(expected_prob));
 }
 
+/**
+ * @brief Ensures the stochastic gradient descent logic updates the internal weights 
+ * towards the direction that reduces error.
+ */
 TEST_CASE("UPDATEWEIGHTS ADJUSTS WEIGHTS IN THE RIGHT DIRECTION", "[model]") {
   LogisticRegression model(1);
   LogisticRegressionTester::weights(model) = Vector{0.0};
@@ -53,6 +69,10 @@ TEST_CASE("UPDATEWEIGHTS ADJUSTS WEIGHTS IN THE RIGHT DIRECTION", "[model]") {
           Approx(0.00374).margin(0.001));
 }
 
+/**
+ * @brief Checks if a full training cycle on simple mock data converges successfully 
+ * and is capable of correctly classifying data points.
+ */
 TEST_CASE("TRAINING REDUCES LOSS AND CLASSIFIES CORRECTLY", "[model]") {
   ProcessedData data;
   data.features = Matrix(4, 2);
@@ -73,6 +93,10 @@ TEST_CASE("TRAINING REDUCES LOSS AND CLASSIFIES CORRECTLY", "[model]") {
   REQUIRE(y_pred_negative < 0.15);
 }
 
+/**
+ * @brief Validates the evaluation metrics calculation logic against a small 
+ * known dataset to ensure Accuracy, Precision, Recall, and F1 formulas are correct.
+ */
 TEST_CASE("ACCURACY, PRECISION, RECALL, F1SCORE COMPUTE CORRECTLY", "[model]") {
   ProcessedData test_data;
   test_data.features = Matrix{Vector{0.0}, Vector{1.0}, Vector{2.0}};
@@ -86,6 +110,10 @@ TEST_CASE("ACCURACY, PRECISION, RECALL, F1SCORE COMPUTE CORRECTLY", "[model]") {
   REQUIRE(model.f1Score(test_data) == Approx(2.0 / 3.0));
 }
 
+/**
+ * @brief Confirms the model can successfully serialize its weights/bias to a JSON file 
+ * and subsequently restore its exact state.
+ */
 TEST_CASE("PERSISTENCE SAVE/LOAD CHECK", "[model]") {
   LogisticRegression model(3);
   const std::string filename = "simple_test_model.json";

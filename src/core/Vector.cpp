@@ -1,3 +1,7 @@
+/**
+ * @file Vector.cpp
+ * @brief Implementation of the Vector class for mathematical vector operations.
+ */
 #include "../../include/core/Vector.hpp"
 
 //----------Vector methods----------//

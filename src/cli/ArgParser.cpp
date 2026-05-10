@@ -1,3 +1,7 @@
+/**
+ * @file ArgParser.cpp
+ * @brief Implementation of the ArgParser class for handling command-line arguments.
+ */
 #include "../../include/cli/ArgParser.hpp"
 
 ArgParser::ArgParser(int argc, char* argv[]) {
