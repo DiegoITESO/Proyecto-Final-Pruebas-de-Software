@@ -1,7 +1,15 @@
+/**
+ * @file test_matrix.cpp
+ * @brief Unit tests for the Matrix class and its operations using Catch2.
+ */
 #include "../include/core/Matrix.hpp"
 #include "../include/core/Vector.hpp"
 #include "catch.hpp"
 
+/**
+ * @brief Ensures matrices built from vector rows reject inconsistent row
+ * lengths.
+ */
 TEST_CASE("CONSTRUCTOR DESDE VECTOR DE FILAS VALIDA LA CONSISTENCIA",
           "[matrix]") {
   Vector row1({1.0, 2.0});
@@ -12,6 +20,10 @@ TEST_CASE("CONSTRUCTOR DESDE VECTOR DE FILAS VALIDA LA CONSISTENCIA",
   REQUIRE_THROWS_AS(Matrix({row1, badRow}), std::invalid_argument);
 }
 
+/**
+ * @brief Checks if allocating a matrix by specific dimensions correctly
+ * initializes it with zeros.
+ */
 TEST_CASE("CONSTRUCTOR EXPLICITO CON DIMENSIONES CREA MATRIZ NULA",
           "[matrix]") {
   Matrix m(2, 3);
@@ -21,6 +33,10 @@ TEST_CASE("CONSTRUCTOR EXPLICITO CON DIMENSIONES CREA MATRIZ NULA",
     for (size_t j = 0; j < 3; ++j) REQUIRE(m[i][j] == Approx(0.0));
 }
 
+/**
+ * @brief Verifies that accessing a row outside the matrix boundaries throws an
+ * exception.
+ */
 TEST_CASE("OPERADOR DE ACCESO VALIDA INDICES", "[matrix]") {
   Matrix m({Vector({1, 2, 3}), Vector({4, 5, 6})});
   REQUIRE_NOTHROW(m[0]);
@@ -28,6 +44,10 @@ TEST_CASE("OPERADOR DE ACCESO VALIDA INDICES", "[matrix]") {
   REQUIRE_THROWS_AS(m[2], std::out_of_range);
 }
 
+/**
+ * @brief Validates the matrix transpose logic, ensuring rows and columns are
+ * properly swapped.
+ */
 TEST_CASE("TRANSPUESTA DE MATRIZ SE CALCULA CORRECTAMENTE", "[matrix]") {
   Matrix m({Vector({1, 2}), Vector({3, 4}), Vector({5, 6})});
 
@@ -42,6 +62,10 @@ TEST_CASE("TRANSPUESTA DE MATRIZ SE CALCULA CORRECTAMENTE", "[matrix]") {
   REQUIRE(t[1][2] == Approx(6));
 }
 
+/**
+ * @brief Confirms that multiplying a matrix by a scalar correctly applies the
+ * multiplication to all elements.
+ */
 TEST_CASE("PRODUCTO ESCALAR CON MATRIZ", "[matrix]") {
   Matrix m({Vector({1, 2}), Vector({3, 4})});
 
@@ -53,6 +77,9 @@ TEST_CASE("PRODUCTO ESCALAR CON MATRIZ", "[matrix]") {
   REQUIRE(result[1][1] == Approx(8));
 }
 
+/**
+ * @brief Verifies mathematical correctness of multiplying a Matrix by a Vector.
+ */
 TEST_CASE("PRODUCTO MATRIZ POR VECTOR", "[matrix]") {
   Matrix m({Vector({1, 2}), Vector({3, 4}), Vector({5, 6})});
 
@@ -65,6 +92,10 @@ TEST_CASE("PRODUCTO MATRIZ POR VECTOR", "[matrix]") {
   REQUIRE(result[2] == Approx(11));
 }
 
+/**
+ * @brief Ensures standard dot-product-based Matrix-Matrix multiplication
+ * yields expected results.
+ */
 TEST_CASE("PRODUCTO MATRIZ POR MATRIZ", "[matrix]") {
   Matrix A({Vector({1, 2}), Vector({3, 4})});
 

@@ -1,3 +1,7 @@
+/**
+ * @file Splitter.cpp
+ * @brief Implementation of data splitting strategies for train/test datasets.
+ */
 #include "../../include/core/Splitter.hpp"
 std::pair<ProcessedData, ProcessedData> RandomSplitter::split(
     const ProcessedData& data, const double ratio) {

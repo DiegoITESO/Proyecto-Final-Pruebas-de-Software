@@ -1,3 +1,7 @@
+/**
+ * @file Logger.cpp
+ * @brief Implementation of the Logger class for file-based logging.
+ */
 #include "../../include/log/Logger.hpp"
 
 //----------Logger methods----------//

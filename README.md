@@ -1,5 +1,6 @@
 # Customer Churn Predictor
 
+## Description
 Customer Churn Predictor is a C++ project that implements a simple logistic regression model to predict whether a customer is likely to cancel a service or subscription, based on a set of input features.
 
 ## Key Implementations
@@ -11,6 +12,25 @@ Customer Churn Predictor is a C++ project that implements a simple logistic regr
 - Basic CSV parsing for input and output handling
 - Command-line interface for training, predicting, and evaluating the model
 - Logging with timestamped log files
+
+## Tools Used
+- **Language**: C++ (C++20 standard)
+- **Compiler**: GCC (g++)
+- **Build System**: Make
+- **Formatting**: Clang-format
+
+## Dependencies
+- **Standard Library**: C++ Standard Template Library (STL)
+- **Testing Framework**: Catch2
+- **JSON Parser**: nlohmann/json (included in the project)
+
+## Requirements
+- **OS**: Windows, macOS, or Linux.
+- **Hardware**: Minimal requirements (Any modern CPU, < 100MB RAM).
+- **Software**: See the Prerequisites section below.
+
+## How to Run
+The following steps outline the process to build and execute the application from source.
 
 ## How to Build and Run
 
@@ -88,6 +108,8 @@ This removes the executables (`logistic_churn`, `run_tests`) from the project di
 ├── Makefile          # Build and test automation
 └── README.md         # Project documentation
 ```
+
+## How to Contribute
 
 - Open a Pull Request from your branch to the target branch of the original repo (e.g., main or develop).
 - In the PR description include:
