@@ -1,0 +1,138 @@
+name: Unit Tests and Coverage
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  # Porcentaje de coverage de lineas
+  # Si la cobertura cae por debajo, el job falla y GitHub puede bloquear el merge
+  COVERAGE_LINE_THRESHOLD: "90"
+
+jobs:
+  coverage:
+    name: coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install toolchain and lcov
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential lcov
+
+      - name: Clean and run unit tests with coverage
+        run: |
+          set -euo pipefail
+          make clean || true
+          rm -f *.gcda *.gcno *.gcov coverage.raw.info coverage.info
+          rm -rf coverage-html
+          make test CXXFLAGS='-g -std=c++20 -Wall -Iinclude --coverage'
+
+      - name: Collect coverage (lcov)
+        run: |
+          set -euo pipefail
+          lcov --capture --directory . --output-file coverage.raw.info \
+            --ignore-errors mismatch \
+            --ignore-errors unused
+          lcov --remove coverage.raw.info \
+            '/usr/*' \
+            '*/tests/*' \
+            '*catch.hpp*' \
+            '*json.hpp*' \
+            --ignore-errors unused \
+            -o coverage.info
+          lcov --list coverage.info
+
+      - name: Generate HTML report
+        run: |
+          set -euo pipefail
+          genhtml coverage.info --output-directory coverage-html \
+            --title "Customer Churn Predictor — cobertura" \
+            --legend \
+            --branch-coverage
+
+      - name: Upload HTML coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: coverage-html/
+          retention-days: 30
+
+      - name: Upload lcov trace (opcional, para herramientas externas)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov-info
+          path: coverage.info
+          retention-days: 30
+
+      - name: Summary and threshold gate
+        env:
+          THRESHOLD: ${{ env.COVERAGE_LINE_THRESHOLD }}
+        run: |
+          set -euo pipefail
+          python3 << 'PY'
+          import os
+          import re
+          import subprocess
+          import sys
+
+          threshold = float(os.environ.get("THRESHOLD", "0"))
+
+          raw = subprocess.run(
+              ["lcov", "--summary", "coverage.info"],
+              capture_output=True,
+              text=True,
+              check=True,
+          )
+          text = raw.stdout + raw.stderr
+          m = re.search(r"lines\.*:\s*([\d.]+)%", text)
+          if not m:
+              print(text)
+              print("No se pudo interpretar el resumen de lcov (líneas).", file=sys.stderr)
+              sys.exit(1)
+          pct = float(m.group(1))
+
+          summary = os.environ.get("GITHUB_STEP_SUMMARY", "")
+          md = []
+          md.append("## Cobertura de pruebas unitarias\n")
+          md.append("| Métrica | Valor |")
+          md.append("|---------|-------|")
+          md.append(f"| Líneas (filtrado) | **{pct:.2f}%** |")
+          md.append(f"| Umbral configurado | {threshold:.2f}% |")
+          md.append("")
+          md.append(
+              "Informe HTML generado con `genhtml` y publicado como **artefacto** "
+              "de este workflow (`coverage-html`)."
+          )
+          md.append("")
+          if pct + 1e-9 < threshold:
+              md.append(
+                  f":x: **Por debajo del umbral** ({pct:.2f}% < {threshold:.2f}%). "
+                  "El merge puede bloquearse si esta comprobación es obligatoria en `main`."
+              )
+              block = True
+          else:
+              md.append(
+                  f":white_check_mark: **Cumple el umbral** ({pct:.2f}% ≥ {threshold:.2f}%)."
+              )
+              block = False
+
+          if summary:
+              with open(summary, "a", encoding="utf-8") as f:
+                  f.write("\n".join(md) + "\n")
+
+          print("\n".join(md))
+          if block:
+              sys.exit(1)
+          PY

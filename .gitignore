@@ -1,3 +1,5 @@
 .idea/
 logistic_churn
 logs/
+*.gcno
+*.gcda
