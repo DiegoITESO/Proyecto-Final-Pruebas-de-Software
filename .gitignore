@@ -1,5 +1,7 @@
 .idea/
 logistic_churn
+run_tests
+run_tests.exe
 logs/
 *.gcno
 *.gcda

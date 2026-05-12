@@ -126,7 +126,7 @@ ProcessedData CSVReader::preprocess(
     processedData.emplace_back(processedRow);
   }
   result.features = Matrix(processedData);
-  result.churnResults = churnResults;
+  result.churnResults = Vector(churnResults);
 
   // GET THE HEADERS //
   if (hasHeader) {

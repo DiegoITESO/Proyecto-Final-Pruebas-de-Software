@@ -20,14 +20,14 @@ std::pair<ProcessedData, ProcessedData> RandomSplitter::split(
     trainFeatures.push_back(shuffledData[indices[i]]);
     trainChurnResults.push_back(churnResults[indices[i]]);
   }
-  train.features = trainFeatures;
-  train.churnResults = trainChurnResults;
+  train.features = Matrix(trainFeatures);
+  train.churnResults = Vector(trainChurnResults);
   for (size_t i = limit; i < dataSize; ++i) {
     testFeatures.push_back(shuffledData[indices[i]]);
     testChurnResults.push_back(churnResults[indices[i]]);
   }
-  test.features = testFeatures;
-  test.churnResults = testChurnResults;
+  test.features = Matrix(testFeatures);
+  test.churnResults = Vector(testChurnResults);
   train.headers = test.headers = data.headers;
   return {train, test};
 }
