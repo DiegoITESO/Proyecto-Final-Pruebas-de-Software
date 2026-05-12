@@ -9,3 +9,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv-ci/
+run_tests
+run_tests.exe
+logs/
+*.gcno
+*.gcda
+venv

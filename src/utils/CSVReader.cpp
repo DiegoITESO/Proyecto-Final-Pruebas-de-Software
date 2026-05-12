@@ -1,3 +1,8 @@
+/**
+ * @file CSVReader.cpp
+ * @brief Implementation of CSVReader utilities for parsing and preprocessing
+ * data.
+ */
 #include "../../include/utils/CSVReader.hpp"
 //----------Util CSVReader functions----------//
 std::vector<std::vector<std::string>> CSVReader::readCSV(
@@ -30,6 +35,17 @@ ProcessedData CSVReader::preprocess(
     throw std::invalid_argument(
         "The number of columns to be dropped must be strictly less than the "
         "number of columns avaliable.");
+  // Feature width excludes dropped columns and the churn label column (when
+  // churnColumn is a real index). For prediction, churnColumn is SIZE_MAX so
+  // no column is treated as the label and all non-dropped columns are features.
+  size_t baseFeatureWidth = 0;
+  for (size_t i = 0; i < data[0].size(); ++i) {
+    if (std::find(dropColumns.begin(), dropColumns.end(), i) !=
+        dropColumns.end())
+      continue;
+    if (i == churnColumn) continue;
+    baseFeatureWidth++;
+  }
   std::unordered_map<size_t, std::unordered_set<std::string>> columnsEncoded;
   bool skippedHeader = false;
   for (const std::vector<std::string>& row : data) {
@@ -53,7 +69,7 @@ ProcessedData CSVReader::preprocess(
   skippedHeader = false;
   std::unordered_map<std::string, size_t>
       encoding_map;  // SAVE EACH NEW VALUE ENCODED AND ITS INDEX
-  size_t nextFreeColumn = data[0].size() - dropColumns.size();
+  size_t nextFreeColumn = baseFeatureWidth;
   size_t offset;  // AN OFFSET:
   /*
       EACH OF THE COLUMNS THAT WILL BE "ONE HOT ENCODED" WILL HAVE TO BE
@@ -61,7 +77,7 @@ ProcessedData CSVReader::preprocess(
      CALCULATING WHERE THE NEXT PARAMETER WILL BE INSERTED
   */
   // START ITERATING THROUGH ALL THE ROWS //
-  size_t newSize = data[0].size() - dropColumns.size();
+  size_t newSize = baseFeatureWidth;
   for (const auto& column : columnsEncoded) newSize += column.second.size();
   std::vector<Vector> processedData;
   std::vector<double> churnResults;
@@ -121,7 +137,7 @@ ProcessedData CSVReader::preprocess(
     processedData.emplace_back(processedRow);
   }
   result.features = Matrix(processedData);
-  result.churnResults = churnResults;
+  result.churnResults = Vector(churnResults);
 
   // GET THE HEADERS //
   if (hasHeader) {
