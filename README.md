@@ -23,11 +23,21 @@ Customer Churn Predictor is a C++ project that implements a simple logistic regr
 
 ### Build the Project
 
+**Linux / macOS / WSL (recomendado si estás en Windows y ya tienes Ubuntu en WSL):**
+
 ```bash
 make
 ```
 
-This compiles the main application and produces an executable named `logistic_churn`.
+**Windows nativo (PowerShell, con `g++` en PATH — p. ej. MSYS2 UCRT64):**
+
+```powershell
+.\build.ps1
+```
+
+Esto genera `logistic_churn` (Unix) o `logistic_churn.exe` (Windows) en la raíz del repositorio.
+
+En Unix, `make` compila la aplicación principal y produce el ejecutable `logistic_churn`.
 
 ### Run the Program
 
@@ -76,9 +86,10 @@ This removes the executables (`logistic_churn`, `run_tests`) from the project di
 
 ## Automated tests
 
+- **Bootstrap (terminal):** `pytest tests/bootstrap -v` — intenta **compilar** el proyecto si aún no existe `logistic_churn` / `logistic_churn.exe` (`make`, `build.ps1` o `g++` directo) y comprueba que **`--help`** funciona. Sirve para validar de punta a punta que el entorno puede **arrancar** el binario (similar en espíritu a automatizar “abrir la app”, pero para CLI).
 - **C++ unit tests (terminal):** `make test` — compiles and runs `run_tests` over `tests/*.cpp` (Catch2).
 - **C++ CLI integration (terminal):** build `logistic_churn` first, then from repo root run `pytest tests/integration -v` (Python drives the **same binary** you use manually). See `tests/integration/README.md`.
-- **BDD / acceptance on static HTML (optional tooling):** `pytest tests/selenium -v` — checks local spec pages under `tests/selenium/fixtures/` in a headless browser; it does **not** replace C++ or CLI tests. See `tests/selenium/README.md` and `tests/README.md`.
+- **System tests with BDD (terminal, no browser):** `pytest tests/system -v` — Gherkin scenarios with **pytest-bdd** against the real CLI (subprocess). Fits the same course intent as “Selenium or similar”: **black-box** checks without a web UI. See `tests/system/README.md` and `tests/README.md`.
 
 ## Project Structure
 
@@ -89,9 +100,10 @@ This removes the executables (`logistic_churn`, `run_tests`) from the project di
 │   └── ...
 ├── src/              # Core logic (vector ops, model, etc.)
 │   └── ...
-├── tests/            # C++ unit tests (*.cpp) + Python integration & Selenium/BDD
+├── tests/            # C++ unit tests (*.cpp) + Python bootstrap, integration & system BDD
+│   ├── bootstrap/
 │   ├── integration/
-│   └── selenium/
+│   └── system/
 ├── data/             # Input and output data
 ├── logs/             # Execution logs
 ├── Makefile          # Build and test automation

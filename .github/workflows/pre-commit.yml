@@ -68,24 +68,21 @@ jobs:
         run: pip install -r tests/requirements.txt
 
       - name: Ruff lint
-        run: ruff check tests/selenium tests/integration
+        run: ruff check tests/system tests/integration tests/bootstrap
 
       - name: Ruff format
-        run: ruff format --check tests/selenium tests/integration
+        run: ruff format --check tests/system tests/integration tests/bootstrap
 
       - name: Install build toolchain
         run: |
           sudo apt-get update
           sudo apt-get install -y make g++
 
-      - name: Build C++ binary
-        run: make
+      - name: Bootstrap build + CLI smoke (pytest)
+        run: pytest tests/bootstrap -v --tb=short
 
       - name: Integration tests (unittest via pytest)
         run: pytest tests/integration -v --tb=short
 
-      - name: Set up Chrome for Selenium
-        uses: browser-actions/setup-chrome@v1
-
-      - name: Selenium BDD tests
-        run: pytest tests/selenium -v --tb=short
+      - name: System BDD tests (CLI, pytest-bdd)
+        run: pytest tests/system -v --tb=short

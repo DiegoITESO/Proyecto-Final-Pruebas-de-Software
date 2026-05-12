@@ -22,3 +22,5 @@ Build first, e.g. `make` (Linux/macOS) or your project’s `build.ps1` / `build.
 ## Expected result
 
 All tests **execute** (none skipped for “binary missing”). On success: **exit code 0** and every test **passed**.
+
+Gherkin-style system scenarios (same binary) live in **`tests/system`** (`pytest tests/system`).

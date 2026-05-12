@@ -1,1 +1,1 @@
-"""Test package root (Python integration + Selenium BDD live under ``tests/``)."""
+"""Test package root (Python integration + system BDD live under ``tests/``)."""

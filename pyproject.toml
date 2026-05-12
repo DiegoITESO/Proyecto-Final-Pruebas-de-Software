@@ -1,15 +1,14 @@
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-src = ["tests/selenium", "tests/integration"]
+src = ["tests/system", "tests/integration", "tests/bootstrap"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests/selenium", "tests/integration"]
+testpaths = ["tests/bootstrap", "tests/system", "tests/integration"]
 pythonpath = ["."]
 # Global installs of langsmith register pytest11 as "langsmith_plugin"; it can
 # crash on import with some pydantic versions. Block it so project tests run.
 addopts = ["-p", "no:langsmith_plugin"]
-filterwarnings = ["ignore::DeprecationWarning:selenium.*"]
