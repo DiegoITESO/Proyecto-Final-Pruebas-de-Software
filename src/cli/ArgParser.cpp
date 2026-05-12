@@ -5,6 +5,8 @@
  */
 #include "../../include/cli/ArgParser.hpp"
 
+#include <limits>
+
 ArgParser::ArgParser(int argc, char* argv[]) {
   for (int i = 0; i < argc; ++i) args.push_back(argv[i]);
 };
@@ -88,7 +90,7 @@ void ArgParser::handlePredict() {
   std::string filePath, destinationPath, weightsPath;
   bool hasHeader;
   std::vector<size_t> dropColumns;
-  collectPredictData(filePath, destinationPath, weightsPath, hasHeader,
+  collectPredictData(filePath, weightsPath, destinationPath, hasHeader,
                      dropColumns);
   Logger::instance().log("Trying to parse CSV...");
   std::vector<std::vector<std::string>> csv = CSVReader::readCSV(filePath);
@@ -169,6 +171,7 @@ void ArgParser::collectTrainData(std::string& filePath,
                "(weather the client churned or not):\n"
             << "(0 indexed)\n";
   std::cin >> churnColumn;
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   std::cout << "Enter the indices of the columns you want to drop (press enter "
                "if you don't want any columns to be dropped):\n"
             << "(These can be IDs or data with weak or nonexistent correlation "
@@ -210,6 +213,7 @@ void ArgParser::collectPredictData(std::string& filePath,
     hasHeader = false;
   else
     throw std::runtime_error("Invalid response: " + header);
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   std::cout << "Enter the indices of the columns you want to drop (press enter "
                "if you don't want any columns to be dropped):\n"
             << "(These can be IDs or data with weak or nonexistent correlation "

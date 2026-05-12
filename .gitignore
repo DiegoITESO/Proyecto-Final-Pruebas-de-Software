@@ -1,7 +1,17 @@
 .idea/
 logistic_churn
+logistic_churn.exe
+run_tests
+run_tests.exe
+logs/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv-ci/
 run_tests
 run_tests.exe
 logs/
 *.gcno
 *.gcda
+venv

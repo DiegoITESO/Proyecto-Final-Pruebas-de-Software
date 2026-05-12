@@ -52,3 +52,37 @@ jobs:
             --suppress=missingIncludeSystem \
             --suppress=useStlAlgorithm \
             src/
+
+  python-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python test tooling
+        run: pip install -r tests/requirements.txt
+
+      - name: Ruff lint
+        run: ruff check tests/system tests/integration tests/bootstrap
+
+      - name: Ruff format
+        run: ruff format --check tests/system tests/integration tests/bootstrap
+
+      - name: Install build toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y make g++
+
+      - name: Bootstrap build + CLI smoke (pytest)
+        run: pytest tests/bootstrap -v --tb=short
+
+      - name: Integration tests (unittest via pytest)
+        run: pytest tests/integration -v --tb=short
+
+      - name: System BDD tests (CLI, pytest-bdd)
+        run: pytest tests/system -v --tb=short
