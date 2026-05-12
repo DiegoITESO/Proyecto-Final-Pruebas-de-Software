@@ -86,8 +86,59 @@ jobs:
           import re
           import subprocess
           import sys
+          from collections import defaultdict
 
           threshold = float(os.environ.get("THRESHOLD", "0"))
+          workspace = os.environ.get("GITHUB_WORKSPACE", "").rstrip("/")
+
+          def rel_path(path: str) -> str:
+              if workspace and path.startswith(workspace + os.sep):
+                  return path[len(workspace) + 1 :]
+              return path
+
+          def compress_line_nums(lines: list[int]) -> str:
+              if not lines:
+                  return ""
+              lines = sorted(set(lines))
+              parts: list[str] = []
+              start = prev = lines[0]
+              for x in lines[1:]:
+                  if x == prev + 1:
+                      prev = x
+                  else:
+                      parts.append(str(start) if start == prev else f"{start}-{prev}")
+                      start = prev = x
+              parts.append(str(start) if start == prev else f"{start}-{prev}")
+              return ", ".join(parts)
+
+          def parse_lcov_da(path: str):
+              """Per file: set of instrumented lines, set of covered (hits>0), set of uncovered."""
+              current = None
+              instrumented: dict[str, set[int]] = defaultdict(set)
+              covered: dict[str, set[int]] = defaultdict(set)
+              with open(path, encoding="utf-8", errors="replace") as fh:
+                  for line in fh:
+                      line = line.strip()
+                      if line.startswith("SF:"):
+                          current = line[3:]
+                      elif line.startswith("DA:") and current:
+                          body, _, hits_s = line[3:].partition(",")
+                          try:
+                              lineno = int(body)
+                              hits = int(hits_s.strip())
+                          except ValueError:
+                              continue
+                          instrumented[current].add(lineno)
+                          if hits > 0:
+                              covered[current].add(lineno)
+                      elif line == "end_of_record":
+                          current = None
+              uncovered: dict[str, list[int]] = {}
+              for fp, inst in instrumented.items():
+                  miss = sorted(inst - covered.get(fp, set()))
+                  if miss:
+                      uncovered[fp] = miss
+              return instrumented, covered, uncovered
 
           raw = subprocess.run(
               ["lcov", "--summary", "coverage.info"],
@@ -103,8 +154,35 @@ jobs:
               sys.exit(1)
           pct = float(m.group(1))
 
+          list_proc = subprocess.run(
+              ["lcov", "--list", "coverage.info"],
+              capture_output=True,
+              text=True,
+              check=True,
+          )
+          lcov_list = (list_proc.stdout or "") + (list_proc.stderr or "")
+          list_max = 45000
+          if len(lcov_list) > list_max:
+              lcov_list = (
+                  lcov_list[:list_max]
+                  + f"\n\n… (recorte: salida de `lcov --list` > {list_max} caracteres; "
+                  "descarga el artefacto `coverage-html` o `coverage-lcov-info` para el detalle completo.)"
+              )
+
+          instrumented, covered, uncovered = parse_lcov_da("coverage.info")
+          rows = []
+          for fp in sorted(instrumented.keys()):
+              inst = instrumented[fp]
+              cov = covered.get(fp, set()) & inst
+              n_inst = len(inst)
+              n_cov = len(cov)
+              n_miss = n_inst - n_cov
+              line_pct = (100.0 * n_cov / n_inst) if n_inst else 100.0
+              rows.append((line_pct, n_miss, fp, n_inst, n_cov, n_miss))
+          rows.sort(key=lambda r: (r[0], -r[1]))  # peor % primero, luego más faltantes
+
           summary = os.environ.get("GITHUB_STEP_SUMMARY", "")
-          md = []
+          md: list[str] = []
           md.append("## Cobertura de pruebas unitarias\n")
           md.append("| Métrica | Valor |")
           md.append("|---------|-------|")
@@ -112,8 +190,9 @@ jobs:
           md.append(f"| Umbral configurado | {threshold:.2f}% |")
           md.append("")
           md.append(
-              "Informe HTML generado con `genhtml` y publicado como **artefacto** "
-              "de este workflow (`coverage-html`)."
+              "El informe **HTML** (`genhtml`) está en el artefacto **`coverage-html`** "
+              "(línea a línea: verde/rojo). El archivo **`coverage-lcov-info`** sirve para "
+              "herramientas externas o extensiones de IDE."
           )
           md.append("")
           if pct + 1e-9 < threshold:
@@ -128,11 +207,55 @@ jobs:
               )
               block = False
 
+          md.append("")
+          md.append("### Detalle por archivo (líneas instrumentadas)\n")
+          md.append("| Archivo | Inst. | Cubiertas | Sin cubrir | % líneas |")
+          md.append("|---------|------:|----------:|-----------:|---------:|")
+          for _pct, _miss, fp, n_inst, n_cov, n_miss in rows:
+              p = 100.0 * n_cov / n_inst if n_inst else 100.0
+              md.append(
+                  f"| `{rel_path(fp)}` | {n_inst} | {n_cov} | {n_miss} | {p:.1f}% |"
+              )
+
+          md.append("")
+          md.append("### Líneas sin ejecutar (seguimiento rápido)\n")
+          md.append(
+              "Rangos compactos por archivo (solo archivos con al menos una línea sin cubrir). "
+              "Los números coinciden con el editor / el informe HTML."
+          )
+          md.append("")
+          detail_files = [(len(u), fp, u) for fp, u in uncovered.items()]
+          detail_files.sort(reverse=True)
+          max_files = 40
+          max_ranges_len = 3500
+          if not detail_files:
+              md.append("_No quedaron líneas sin cubrir en el conjunto filtrado (o no hay datos `DA:`)._")
+          for _n, fp, misses in detail_files[:max_files]:
+              blob = compress_line_nums(misses)
+              if len(blob) > max_ranges_len:
+                  blob = blob[:max_ranges_len] + " …"
+              md.append(f"- **`{rel_path(fp)}`**: {blob}")
+          if len(detail_files) > max_files:
+              md.append("")
+              md.append(
+                  f"_… y {len(detail_files) - max_files} archivo(s) más con huecos; "
+                  "revisa el HTML o `lcov --list` abajo._"
+              )
+
+          md.append("")
+          md.append("<details>")
+          md.append("<summary><strong>Salida de <code>lcov --list</code> (resumen por archivo)</strong></summary>\n")
+          md.append("```text")
+          md.append(lcov_list.rstrip())
+          md.append("```")
+          md.append("</details>")
+
+          out = "\n".join(md) + "\n"
           if summary:
               with open(summary, "a", encoding="utf-8") as f:
-                  f.write("\n".join(md) + "\n")
+                  f.write(out)
 
-          print("\n".join(md))
+          print(out)
           if block:
               sys.exit(1)
           PY
