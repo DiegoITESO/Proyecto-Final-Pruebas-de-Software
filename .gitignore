@@ -8,11 +8,11 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
+.venv
 .venv-ci/
 run_tests
 run_tests.exe
 logs/
 *.gcno
 *.gcda
-venv
 *.pyc
