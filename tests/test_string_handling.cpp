@@ -1,6 +1,13 @@
+/**
+ * @file test_string_handling.cpp
+ * @brief Unit tests for string manipulation and validation utility functions.
+ */
 #include "catch.hpp"
 #include "../include/utils/StringHandling.hpp"
 
+/**
+ * @brief Verifies that the isNumber utility correctly identifies valid integer and floating-point numeric strings while rejecting invalid formats.
+ */
 TEST_CASE("StringHandling::isNumber validates numeric formats", "[StringHandling][isNumber]") {
     SECTION("Accepts valid integers and floating-point numbers") {
         CHECK(StringHandling::isNumber("123"));
@@ -26,6 +33,9 @@ TEST_CASE("StringHandling::isNumber validates numeric formats", "[StringHandling
     }
 }
 
+/**
+ * @brief Ensures the toLower function accurately converts strings to lowercase and removes leading/trailing whitespace.
+ */
 TEST_CASE("StringHandling::toLower transforms casing and strips whitespace", "[StringHandling][toLower]") {
     SECTION("Converts uppercase and mixed-case letters to lowercase") {
         CHECK(StringHandling::toLower("HELLO") == "hello");

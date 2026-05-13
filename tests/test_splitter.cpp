@@ -1,3 +1,7 @@
+/**
+ * @file test_splitter.cpp
+ * @brief Unit tests for the RandomSplitter component responsible for splitting datasets.
+ */
 #include "catch.hpp"
 #include "../include/core/Splitter.hpp"
 
@@ -20,6 +24,9 @@ ProcessedData generateDummyData(size_t size) {
     return data;
 }
 
+/**
+ * @brief Validates the random dataset splitting logic, ensuring appropriate training and testing set ratios, deterministic behavior, and proper bounds handling.
+ */
 TEST_CASE("RandomSplitter division and bounds", "[Splitter]") {
     RandomSplitter splitter;
 

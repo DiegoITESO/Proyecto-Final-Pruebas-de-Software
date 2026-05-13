@@ -1,3 +1,7 @@
+/**
+ * @file test_csv_parser.cpp
+ * @brief Unit tests for the CSVReader and data preprocessing routines.
+ */
 #include "catch.hpp"
 #include "../include/utils/CSVReader.hpp"
 #include <fstream>
@@ -17,6 +21,9 @@ struct TempCSV {
     }
 };
 
+/**
+ * @brief Checks the file parsing capabilities of CSVReader, ensuring valid data is loaded correctly and exceptions are thrown for missing or inconsistent files.
+ */
 TEST_CASE("CSVReader::readCSV File Parsing", "[CSVReader][I/O]") {
     SECTION("Successfully reads a valid, well-formed CSV") {
         std::string content = 
@@ -48,6 +55,9 @@ TEST_CASE("CSVReader::readCSV File Parsing", "[CSVReader][I/O]") {
     }
 }
 
+/**
+ * @brief Verifies the preprocessing logic including dropping columns, handling categorical values (one-hot encoding), mapping targets, and catching invalid arguments.
+ */
 TEST_CASE("CSVReader::preprocess Logic and Transformation", "[CSVReader][preprocess]") {
     std::vector<std::vector<std::string>> raw_data = {
         {"ID", "Age", "PlanType", "Churn"},
@@ -92,6 +102,9 @@ TEST_CASE("CSVReader::preprocess Logic and Transformation", "[CSVReader][preproc
     }
 }
 
+/**
+ * @brief Validates the isolated mathematical operations used to normalize feature vectors to a standard normal distribution.
+ */
 TEST_CASE("CSVReader::normalizeFeatures isolated math verification", "[CSVReader][normalize]") {
     SECTION("Standardizes a matrix to zero mean and unit variance") {
         ProcessedData data;

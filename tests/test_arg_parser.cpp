@@ -1,3 +1,7 @@
+/**
+ * @file test_arg_parser.cpp
+ * @brief Unit tests for the ArgParser CLI parameter processing and data persistence utilities.
+ */
 #include "catch.hpp"
 #include "../include/cli/ArgParser.hpp"
 
@@ -34,6 +38,9 @@ public:
     }
 };
 
+/**
+ * @brief Tests the constructor and run behavior of the ArgParser, validating correct interpretation of CLI flags such as --help, --train, --evaluate, and --predict.
+ */
 TEST_CASE("ArgParser Initialization and Option Parsing", "[ArgParser][run]") {
     CoutSuppressor suppress; 
 
@@ -53,6 +60,9 @@ TEST_CASE("ArgParser Initialization and Option Parsing", "[ArgParser][run]") {
     }
 }
 
+/**
+ * @brief Verifies that interactive data collection routines accurately capture and parse user input for training variables.
+ */
 TEST_CASE("ArgParser Data Collection Routines", "[ArgParser][I/O]") {
     CoutSuppressor suppress;
     const char* argv[] = { "./logistic_churn" };
@@ -142,6 +152,9 @@ TEST_CASE("ArgParser Data Collection Routines", "[ArgParser][I/O]") {
     }
 }
 
+/**
+ * @brief Tests the file writing utility to ensure that predictions and logs are successfully persisted to standard files.
+ */
 TEST_CASE("ArgParser File Writing Operations", "[ArgParser][saveToCSVFile]") {
     const char* argv[] = { "./logistic_churn" };
     ArgParser parser(1, const_cast<char**>(argv));
