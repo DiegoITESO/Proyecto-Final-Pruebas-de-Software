@@ -94,6 +94,78 @@ make clean
 
 This removes the executables (`logistic_churn`, `run_tests`) from the project directory.
 
+### Run Unit Tests
+
+To verify that the system functions correctly, you can execute the unit test suite. Run the following command:
+
+```bash
+make test
+```
+
+This will compile and execute all configured unit tests using Catch2.
+
+### Development Environment Setup (Ubuntu / WSL)
+
+For a complete development and testing environment in Ubuntu or WSL, follow these detailed steps to install all dependencies, configure a Python virtual environment for system tests, and run the complete test suite.
+
+#### 1. System Preparation
+
+First, navigate to the project directory, update your system packages, and install the required tools:
+
+```bash
+cd Proyecto-Final-Pruebas-de-Software
+sudo apt-get update
+sudo apt-get install -y python3 python3-pip python3-venv build-essential
+```
+
+#### 2. Verify Installations
+
+Check that the required tools were installed correctly:
+
+```bash
+g++ --version
+make --version
+python3 --version
+```
+
+#### 3. Python Virtual Environment
+
+Set up an isolated Python environment to install the test dependencies:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r tests/requirements.txt
+```
+
+#### 4. Build and Run C++ Tests
+
+Compile the main executable and run the C++ unit tests:
+
+```bash
+make main
+make test
+```
+
+#### 5. Run Python Tests (Pytest)
+
+Execute the different levels of automated tests using `pytest`:
+
+```bash
+# Run bootstrap tests
+pytest tests/bootstrap -v
+
+# Run integration tests
+pytest tests/integration -v
+
+# Run system tests
+pytest tests/system -v
+
+# Alternatively, run the entire test suite at once
+pytest -v
+```
+
 ## Project Structure
 
 ```
