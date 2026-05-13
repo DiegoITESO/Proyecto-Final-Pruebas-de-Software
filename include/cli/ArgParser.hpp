@@ -36,7 +36,11 @@ class ArgParser {
    */
   void run();
 
+ #ifdef UNIT_TESTING
+ public:
+ #else
  private:
+ #endif
   std::vector<std::string> args;  ///< Stores the command-line arguments.
 
   /**
